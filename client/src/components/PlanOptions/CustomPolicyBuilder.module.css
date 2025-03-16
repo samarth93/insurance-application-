@@ -1,0 +1,119 @@
+.vehicle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  margin-left: 8px;
+}
+
+.editLink {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.singleCover {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #dcdee9;
+}
+
+.singleCover button {
+  background-color: white;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.customPolicyOption {
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid #dcdee9;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.customPolicyOption:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.customPolicySelected {
+  border: 2px solid #e74d31;
+}
+
+.optionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.optionTitle {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.optionPrice {
+  font-weight: 500;
+  color: #e74d31;
+}
+
+.optionDescription {
+  font-size: 14px;
+  color: #505f79;
+}
+
+.sliderContainer {
+  margin: 24px 0;
+}
+
+.sliderLabel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.slider {
+  width: 100%;
+  height: 4px;
+}
+
+.totalSection {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f4f5f7;
+  border-radius: 4px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.totalAmount {
+  font-weight: 600;
+  font-size: 18px;
+  color: #e74d31;
+}
+
+.continueButton {
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  background-color: #e74d31;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.continueButton:hover {
+  background-color: #d43e23;
+} 

@@ -1,0 +1,38 @@
+.customPolicyOptions {
+  margin-top: 8px;
+}
+
+.customPolicyOption {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  margin-left: 24px;
+}
+
+.policyDetails {
+  margin-top: 20px;
+}
+
+.policyDetailItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.policyDetailIcon {
+  margin-right: 8px;
+}
+
+.premiumDisplay {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #f4f5f7;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+}
+
+.premiumAmount {
+  color: #e74d31;
+} 
