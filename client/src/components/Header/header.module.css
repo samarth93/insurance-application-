@@ -3,6 +3,10 @@
   min-height: 60px;
   box-shadow: 0px 2px 0px #f6f7fb;
   background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
 }
 
 .headerlogodiv {
@@ -31,4 +35,95 @@
   left: 0;
   width: 1em;
   top: 0.3em;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  margin-right: 5%;
+}
+
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.welcomeText {
+  font-size: 14px;
+  color: #505f79;
+}
+
+.dashboardLink, .loginButton, .registerButton {
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.dashboardLink {
+  background-color: #f0f0f0;
+  color: #253858;
+}
+
+.dashboardLink:hover {
+  background-color: #e0e0e0;
+}
+
+.logoutButton {
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #de350b;
+  border: 1px solid #de350b;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+  background-color: #ffebe6;
+}
+
+.authLinks {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loginButton {
+  background-color: #ffffff;
+  color: #5A68E7;
+  border: 1px solid #5A68E7;
+}
+
+.loginButton:hover {
+  background-color: #f0f2ff;
+}
+
+.registerButton {
+  background-color: #5A68E7;
+  color: #ffffff;
+  border: 1px solid #5A68E7;
+}
+
+.registerButton:hover {
+  background-color: #4a56c9;
+}
+
+@media (max-width: 768px) {
+  .headerlogodiv {
+    margin-left: 5%;
+  }
+  
+  .headerActions {
+    margin-right: 5%;
+  }
+  
+  .welcomeText {
+    display: none;
+  }
 }

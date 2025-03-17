@@ -463,24 +463,35 @@ export const CustomPolicyBuilder = () => {
     localStorage.setItem("policyEndDate", endDate);
     localStorage.setItem("policyDuration", selectedDuration);
     
-    // Send data to server
-    axios
-      .post(`https://acko.herokuapp.com/user`, {
-        selectedPlan: "Custom Policy",
-        mobile: carDetails.mobile,
-        premium: calculateTotalPremium(),
-        paCover: coverageOptions.find(o => o.name === "Personal Accident Cover" && o.isSelected) ? 
-                coverageOptions.find(o => o.name === "Personal Accident Cover").price : 0,
-        ncbDiscountAmount: (+basePremium * 20) / 80,
-        customPolicy: coverageOptions.filter(option => option.isSelected).map(o => o.name),
-        policyStartDate: startDate,
-        policyEndDate: endDate,
-        policyDuration: selectedDuration
-      })
-      .then((res) => {
-        localStorage.setItem("ackoUserId", res.data._id);
-        history.push("/addtional-details");
-      });
+    try {
+      // Send data to server
+      axios
+        .post(`https://acko.herokuapp.com/user`, {
+          selectedPlan: "Custom Policy",
+          mobile: carDetails.mobile,
+          premium: calculateTotalPremium(),
+          paCover: coverageOptions.find(o => o.name === "Personal Accident Cover" && o.isSelected) ? 
+                  coverageOptions.find(o => o.name === "Personal Accident Cover").price : 0,
+          ncbDiscountAmount: (+basePremium * 20) / 80,
+          customPolicy: coverageOptions.filter(option => option.isSelected).map(o => o.name),
+          policyStartDate: startDate,
+          policyEndDate: endDate,
+          policyDuration: selectedDuration
+        })
+        .then((res) => {
+          localStorage.setItem("ackoUserId", res.data._id);
+          history.push("/addtional-details");
+        })
+        .catch((error) => {
+          console.error("Error saving policy data:", error);
+          // Even if the API call fails, still navigate to the next page
+          history.push("/addtional-details");
+        });
+    } catch (error) {
+      console.error("Error in try-catch block:", error);
+      // If any error occurs, still navigate to the next page
+      history.push("/addtional-details");
+    }
   };
 
   return (

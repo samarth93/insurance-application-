@@ -1,0 +1,136 @@
+/* Mobile Navigation Styles */
+.mobile-nav-container {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background-color: #ffffff;
+  z-index: 999;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav {
+  padding: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mobile-nav-section {
+  margin-bottom: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.mobile-nav-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #253858;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  color: #505f79;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 0.8rem 0;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.mobile-nav-link:hover {
+  color: #5A68E7;
+  background-color: #f0f2ff;
+  padding-left: 0.5rem;
+}
+
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  color: #505f79;
+  font-size: 16px;
+  padding: 0.8rem 0;
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.mobile-nav-item:hover {
+  color: #5A68E7;
+  background-color: #f0f2ff;
+  padding-left: 0.5rem;
+}
+
+.mobile-logout-btn {
+  background-color: #ffffff;
+  color: #de350b;
+  border: 1px solid #de350b;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.mobile-logout-btn:hover {
+  background-color: #ffebe6;
+}
+
+.mobile-claim-btn {
+  background-color: #5A68E7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(90, 104, 231, 0.3);
+}
+
+.mobile-claim-btn:hover {
+  background-color: #4a56c9;
+  box-shadow: 0 4px 8px rgba(90, 104, 231, 0.4);
+}
+
+.mobile-nav-section hr {
+  border: none;
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 1rem 0;
+}
+
+.mobile-nav-disclaimer {
+  font-size: 12px;
+  color: #6b778c;
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+} 

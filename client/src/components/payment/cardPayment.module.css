@@ -321,3 +321,54 @@
   height: 46px;
   margin-left: 6px;
 }
+
+.totalAmountCard {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.totalAmountHeader {
+  font-size: 16px;
+  font-weight: 600;
+  color: #253858;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e9eaf2;
+}
+
+.totalAmountValue {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e9eaf2;
+}
+
+.totalAmountValue > div:first-child {
+  font-size: 14px;
+  color: #505f79;
+}
+
+.totalAmountValue > div:last-child {
+  font-size: 20px;
+  font-weight: 700;
+  color: #253858;
+}
+
+.securePaymentNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #505f79;
+}
+
+/* Remove the premium breakdown styles since we're not using them anymore */
+.premiumBreakdown {
+  display: none;
+}

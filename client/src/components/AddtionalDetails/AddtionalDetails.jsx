@@ -39,40 +39,28 @@ export const AddtionalDetails = () => {
   const history=useHistory()
 
   const handleClickk = async (e) => {
-  //   e.preventDefault();
-  //   configureCaptcha()
-  //  const phoneNumber = '+916379935905'
-  //  const appVerifier = window.recaptchaVerifier;
-  //  firebase
-  //    .auth()
-  //    .signInWithPhoneNumber(phoneNumber, appVerifier)
-  //    .then((confirmationResult) => {
-  //      // SMS sent. Prompt user to type the code from the message, then sign the
-  //      // user in with confirmationResult.confirm(code).
-  //      window.confirmationResult = confirmationResult;
-  //      console.log("otp send");
-  //      // ...
-  //    })
-  //    .catch((error) => {
-  //    console.log(error);
-  //    });
-
-
-
-
-
-
-    ////////////////////////////
-        // setOtpPopup(true);
-        const data = {
-            username: username,
-            email:mail
-        }
-    // await axios.patch(`http://localhost:8080/cars/${id}`, data);
-        await axios.patch(`https://acko.herokuapp.com/cars/${id}`, data);
-        history.push("/final-details");
-
-}
+    try {
+      // Save user data
+      const data = {
+        username: username,
+        email: mail
+      };
+      
+      // Try to update the car data with user information
+      await axios.patch(`https://acko.herokuapp.com/cars/${id}`, data)
+        .catch(error => {
+          console.error("Error updating car data:", error);
+          // Continue even if the API call fails
+        });
+      
+      // Navigate directly to the payment page
+      history.push("/cardPayment");
+    } catch (error) {
+      console.error("Error in handleClickk:", error);
+      // If any error occurs, still try to navigate
+      history.push("/cardPayment");
+    }
+  };
 
 
 
@@ -245,7 +233,7 @@ export const AddtionalDetails = () => {
               <p>
                 {" "}
                 By tapping on continue I declare that i have provided correct
-                details and have read Acko’s <a href="">T&C</a>.
+                details and have read Acko's <a href="">T&C</a>.
               </p>
             </div>
 
@@ -261,7 +249,7 @@ export const AddtionalDetails = () => {
           </div>
 
           <div className={style.flexdiv2}>
-            <div>
+            <div style={{ marginBottom: "16px" }}>
               <OwnDamagePlan1 />
             </div>
 

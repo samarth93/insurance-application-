@@ -1,38 +1,24 @@
 import "./bynow.css";
 import thamicon from "./thmb.svg";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 export const ByNow = () => {
-//   const id = localStorage.getItem("ackoid");
+  const [total, setTotal] = useState("");
 
-//   const [data, setData] = useState("");
-
-//   const getData = async () => {
-//     const { data } = await axios.get(`http://localhost:8080/cars/${id}`);
-//     setData(data);
-//     console.log(data);
-//   };
-
-//   useEffect(() => {
-//     getData();
-//   }, []);
-    var total
-    useEffect(() => {
-         total = localStorage.getItem("totalacko");
-        console.log("local", total);
-    },[])
-
+  useEffect(() => {
+    const storedTotal = localStorage.getItem("totalacko") || "0";
+    setTotal(storedTotal);
+  }, []);
 
   return (
     <div className="bynowmaindiv">
       <Link
-        style={{ textDecoration: "none", width: "150px", heigth: "200px" }}
+        style={{ textDecoration: "none", width: "150px", height: "200px" }}
         to="/cardPayment"
       >
         <div>
-          <div>{total}</div>
+          <div>₹{total}</div>
           <div>Buy Now</div>
         </div>
       </Link>
