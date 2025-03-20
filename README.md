@@ -1,3 +1,4 @@
-# ACKO
-Clone of acko.com
-# insurance-application-
+INSURETECH
+
+Your all in one insurance management portal that bring all your insurances under one roof.
+We'll be live SOON!
