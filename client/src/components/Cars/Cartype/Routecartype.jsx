@@ -1,22 +1,15 @@
-import React from "react";
-import Header from "../../Header/Header";
+import React, { useState } from "react";
 import Common from "../Common/Common";
-import Dynamic from "../Dynamic/Dynamic";
 import Cartype from "./Cartype";
-import style from "../cars.module.css";
+import Dynamic from "../Dynamic/Dynamic";
 
 function Routecartype() {
   return (
-    <div>
-      <Header />
-      <Common />
-      <div className={style.divflex}>
-        <div className={style.flexdiv1}>
-          <Cartype />
-        </div>
-        <div className={style.flexdiv2}>
-          <Dynamic />
-        </div>
+    <div className="app">
+      <div className="flex">
+        <Common />
+        <Cartype />
+        <Dynamic />
       </div>
     </div>
   );

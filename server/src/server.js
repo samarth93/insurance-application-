@@ -2,6 +2,7 @@ const express = require("express");
 const connect = require("./config/db");
 const cors = require("cors");
 require('dotenv').config();
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -14,6 +15,15 @@ const carController = require("./controllers/car.controller");
 const userController = require("./controllers/user.controller");
 const authController = require("./controllers/auth.controller");
 const policyController = require("./controllers/policy.controller");
+
+// Health check endpoint for frontend availability detection
+app.get("/health", (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  });
+});
 
 // Routes
 app.use("/cars", carController);
@@ -61,9 +71,23 @@ process.on('unhandledRejection', (reason, promise) => {
 // Start server
 const port = process.env.PORT || 8080;
 
+// Use a flag to prevent multiple connection attempts during restart
+let isConnecting = false;
+
 // Handle server errors
-const server = app.listen(port, () => {
-  connect().catch(err => console.error("Database connection error:", err));
+const server = app.listen(port, async () => {
+  if (!isConnecting) {
+    isConnecting = true;
+    try {
+      await connect();
+      console.log(`Database connected successfully`);
+    } catch (err) {
+      console.error("Database connection error:", err.message);
+      console.log("Server running without database connection");
+    } finally {
+      isConnecting = false;
+    }
+  }
   console.log(`Server connected to port: ${port}`);
 });
 

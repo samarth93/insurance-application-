@@ -34,9 +34,26 @@ const PolicyService = {
   // Get all policies
   getPolicies: async () => {
     try {
-      const response = await api.get('/policies');
+      // Add timeout to prevent hanging requests
+      const response = await api.get('/policies', { timeout: 10000 });
       return response.data;
     } catch (error) {
+      console.error('Error getting policies:', error);
+      
+      // More detailed error handling
+      if (error.code === 'ECONNABORTED') {
+        throw { message: 'Request timed out. Server might be unavailable.' };
+      } else if (!error.response) {
+        throw { message: 'Network error. Please check your connection.' };
+      } else if (error.response.status === 401) {
+        // Token expired, force re-login
+        AuthService.logout();
+        window.location.href = '/login';
+        throw { message: 'Session expired. Please log in again.' };
+      } else if (error.response.status >= 500) {
+        throw { message: 'Server error. Please try again later.' };
+      }
+      
       throw error.response ? error.response.data : error;
     }
   },
@@ -44,9 +61,17 @@ const PolicyService = {
   // Get a specific policy
   getPolicy: async (policyId) => {
     try {
-      const response = await api.get(`/policies/${policyId}`);
+      const response = await api.get(`/policies/${policyId}`, { timeout: 10000 });
       return response.data;
     } catch (error) {
+      console.error('Error getting policy:', error);
+      
+      if (error.code === 'ECONNABORTED') {
+        throw { message: 'Request timed out. Server might be unavailable.' };
+      } else if (!error.response) {
+        throw { message: 'Network error. Please check your connection.' };
+      }
+      
       throw error.response ? error.response.data : error;
     }
   },
@@ -90,11 +115,28 @@ const PolicyService = {
         throw new Error('User ID not found. Please log in again.');
       }
 
-      // Get car details from localStorage
-      const carNumber = localStorage.getItem('carNumber') || 'KA01AB1234';
-      const carMake = localStorage.getItem('carMake') || 'Ford';
-      const carModel = localStorage.getItem('carModel') || 'Titanium AT';
-      const carYear = localStorage.getItem('carYear') || new Date().getFullYear().toString();
+      // Check if this is a car or bike policy
+      const vehicleType = localStorage.getItem('vehicleType') || 'car';
+      const isPolicyForBike = vehicleType === 'bike';
+
+      // Get vehicle details from localStorage
+      let vehicleNumber, vehicleMake, vehicleModel, vehicleYear, policyType;
+      
+      if (isPolicyForBike) {
+        // Bike details
+        vehicleNumber = localStorage.getItem('bikeNumber') || 'KA01AB1234';
+        vehicleMake = localStorage.getItem('bikeMake') || 'Honda';
+        vehicleModel = localStorage.getItem('bikeModel') || 'CB Shine';
+        vehicleYear = localStorage.getItem('bikeYear') || new Date().getFullYear().toString();
+        policyType = localStorage.getItem('policyType') || 'Comprehensive Bike Insurance';
+      } else {
+        // Car details
+        vehicleNumber = localStorage.getItem('carNumber') || 'KA01AB1234';
+        vehicleMake = localStorage.getItem('carMake') || 'Ford';
+        vehicleModel = localStorage.getItem('carModel') || 'Titanium AT';
+        vehicleYear = localStorage.getItem('carYear') || new Date().getFullYear().toString();
+        policyType = localStorage.getItem('policyType') || 'Comprehensive Car Insurance';
+      }
       
       // Get premium details
       const totalPremium = localStorage.getItem('totalacko');
@@ -114,24 +156,26 @@ const PolicyService = {
       // Create policy data with more realistic values
       const policyData = {
         policyNumber: policyNumber,
-        policyType: localStorage.getItem('policyType') || 'Comprehensive Car Insurance',
+        policyType: policyType,
         startDate: new Date(),
         endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
         status: 'active',
+        vehicleType: isPolicyForBike ? 'bike' : 'car',
         vehicleDetails: {
-          make: carMake,
-          model: carModel,
-          year: parseInt(carYear),
-          registrationNumber: carNumber
+          make: vehicleMake,
+          model: vehicleModel,
+          year: parseInt(vehicleYear),
+          registrationNumber: vehicleNumber,
+          usage: isPolicyForBike ? localStorage.getItem('bikeUse') || 'Personal use' : undefined
         },
         coverage: {
           thirdPartyLiability: true,
           ownDamage: true,
           personalAccidentCover: localStorage.getItem('paCover') === 'true',
-          consumablesCover: localStorage.getItem('consumablesCover') === 'true' || true,
+          consumablesCover: localStorage.getItem('consumablesCover') === 'true' || false,
           zeroDepreciation: localStorage.getItem('zeroDepreciation') === 'true' || false,
           engineProtection: localStorage.getItem('engineProtection') === 'true' || false,
-          roadSideAssistance: localStorage.getItem('roadSideAssistance') === 'true' || true
+          roadSideAssistance: localStorage.getItem('roadSideAssistance') === 'true' || false
         },
         premium: {
           basePremium: basePremium,
@@ -144,7 +188,7 @@ const PolicyService = {
         }
       };
 
-      console.log("Creating policy with data:", policyData);
+      console.log(`Creating ${isPolicyForBike ? 'bike' : 'car'} policy with data:`, policyData);
 
       // Create policy
       const policyResponse = await api.post('/policies', policyData);

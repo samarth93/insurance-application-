@@ -1,49 +1,52 @@
 import React from "react";
-import style from "./policy.module.css";
-import thumbsup from "./thumbsup paper.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import style from "./policy.module.css";
+import thumbsup from "./thumbsup paper.svg";
 
 function Policy({ setpopupp }) {
+  const handleYesClick = async () => {
+    try {
+      const id = localStorage.getItem("ackoid");
+      if (!id) {
+        console.error("No car ID found in localStorage");
+        return;
+      }
+      
+      const data = { ncb: 0 };
+      await axios.patch(`https://acko.herokuapp.com/cars/${id}`, data);
+      console.log("Policy status updated successfully");
+    } catch (error) {
+      console.error("Error updating policy status:", error);
+    }
+  };
+
   return (
     <div className={style.policybody}>
-      <div
-        style={{
-          fontStyle: "normal",
-          fontWeight: "bolder",
-          fontSize: "18px",
-          lineHeight: "22px",
-          width: "300px",
-        }}
-      >
+      <h2 className={style.policyTitle}>
         Did you make a claim in last policy period?
-      </div>
-      <div style={{ marginTop: "40px" }}>
+      </h2>
+      
+      <div className={style.policyButtons}>
         <Link to="/plans">
-          <button
-            onClick={async () => {
-              const id = localStorage.getItem("ackoid");
-              const data = {
-                ncb: 0,
-              };
-              // await axios.patch(`http://localhost:8080/cars/${id}`, data);
-              await axios.patch(`https://acko.herokuapp.com/cars/${id}`, data);
-            }}
+          <button 
+            className={`${style.policyBtn} ${style.yesBtn}`}
+            onClick={handleYesClick}
           >
             Yes
           </button>
         </Link>
+        
         <button
-          onClick={() => {
-            setpopupp(true);
-          }}
-          style={{ marginLeft: "20px" }}
+          className={`${style.policyBtn} ${style.noBtn}`}
+          onClick={() => setpopupp(true)}
         >
           No
         </button>
       </div>
+      
       <div className={style.policyflexdiv}>
-        <img src={thumbsup} alt="" />
+        <img src={thumbsup} alt="Thumbs up" className={style.thumbsIcon} />
         <p>You can get amazing discounts based on your claim history</p>
       </div>
     </div>

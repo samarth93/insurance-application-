@@ -1,119 +1,482 @@
-.vehicle {
-  font-style: normal;
-  font-weight: 500;
+.mainContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.customPolicyHeader {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.mainTitle {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.mainSubtitle {
+  font-size: 16px;
+  color: #4a5568;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.customPolicyContent {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .customPolicyContent {
+    flex-direction: column;
+  }
+}
+
+.leftPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rightPanel {
+  width: 380px;
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
+}
+
+@media (max-width: 900px) {
+  .rightPanel {
+    width: 100%;
+  }
+}
+
+.sectionCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  transition: box-shadow 0.3s ease;
+}
+
+.sectionCard:hover {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sectionHeader h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.toggleButton {
+  background: #edf2f7;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
   font-size: 14px;
-  line-height: 20px;
-  margin-left: 8px;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.editLink {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 12px;
-  line-height: 16px;
+.toggleButton:hover {
+  background: #e2e8f0;
+  color: #2d3748;
 }
 
-.singleCover {
+.sectionSubtitle {
+  font-size: 14px;
+  color: #718096;
+  margin-top: -8px;
+  margin-bottom: 20px;
+}
+
+.coverageList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.coverageOption {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  border-bottom: 1px solid #dcdee9;
-}
-
-.singleCover button {
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
   background-color: white;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-weight: 500;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.customPolicyOption {
-  margin-bottom: 16px;
-  padding: 12px;
-  border: 1px solid #dcdee9;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+.coverageOption:hover, .coverageOption.hovered {
+  border-color: #90cdf4;
+  background-color: #f7fafc;
+  transform: translateY(-2px);
 }
 
-.customPolicyOption:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.coverageOption.selected {
+  border-color: #4299e1;
+  background-color: #ebf8ff;
+  box-shadow: 0 2px 8px rgba(66, 153, 225, 0.15);
 }
 
-.customPolicySelected {
-  border: 2px solid #e74d31;
-}
-
-.optionHeader {
+.coverageInfo {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  gap: 16px;
+  flex: 1;
 }
 
-.optionTitle {
-  font-weight: 500;
+.coverageIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+}
+
+.coverageDetails {
+  max-width: 70%;
+}
+
+.coverageHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.coverageHeader h3 {
+  margin: 0;
   font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
 }
 
-.optionPrice {
+.requiredBadge {
+  background-color: #553c9a;
+  color: white;
+  font-size: 10px;
   font-weight: 500;
-  color: #e74d31;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-.optionDescription {
-  font-size: 14px;
-  color: #505f79;
+.coverageDescription {
+  font-size: 12px;
+  color: #718096;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.coverageAction {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.coveragePrice {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 2px solid #cbd5e0;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkbox.checked {
+  background-color: #4299e1;
+  border-color: #4299e1;
+}
+
+.checkmark {
+  color: white;
+  font-size: 12px;
 }
 
 .sliderContainer {
-  margin: 24px 0;
+  margin-bottom: 20px;
 }
 
-.sliderLabel {
+.sliderLabels {
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
+  font-size: 14px;
+  color: #718096;
 }
 
 .slider {
   width: 100%;
-  height: 4px;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(to right, #4299e1, #9f7aea);
+  border-radius: 3px;
+  outline: none;
+  margin: 10px 0;
 }
 
-.totalSection {
-  margin-top: 24px;
-  padding: 16px;
-  background-color: #f4f5f7;
-  border-radius: 4px;
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #4299e1;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-.totalRow {
+.sliderValues {
   display: flex;
   justify-content: space-between;
+  font-size: 14px;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.idvIndicator {
+  margin-top: 15px;
+}
+
+.idvIndicatorBar {
+  height: 6px;
+  background-color: #e2e8f0;
+  border-radius: 3px;
   margin-bottom: 8px;
 }
 
-.totalAmount {
+.idvIndicatorFill {
+  height: 100%;
+  background: linear-gradient(to right, #4299e1, #9f7aea);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.idvValue {
+  font-size: 14px;
   font-weight: 600;
+  color: #4a5568;
+  text-align: center;
+}
+
+.durationOptions {
+  display: flex;
+  gap: 12px;
+}
+
+.durationButton {
+  flex: 1;
+  padding: 12px;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.durationButton:hover {
+  border-color: #90cdf4;
+}
+
+.durationButton.selected {
+  border-color: #4299e1;
+  background-color: #ebf8ff;
+  color: #2b6cb0;
+}
+
+.saveBadge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #f56565;
+  color: white;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 12px;
+}
+
+.summaryCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.summaryCard h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.summaryCard.animate {
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.savingsDisplay {
+  background: linear-gradient(135deg, #48bb78, #38b2ac);
+  color: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.savingsLabel {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.savingsAmount {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.selectedCoverages {
+  margin-bottom: 20px;
+}
+
+.selectedCoverages h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #4a5568;
+}
+
+.selectedCoverage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.selectedInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.selectedIcon {
+  font-size: 16px;
+}
+
+.selectedPrice {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.pricingDetails {
+  margin-bottom: 20px;
+}
+
+.pricingRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #718096;
+}
+
+.totalPremium {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-top: 1px solid #e2e8f0;
   font-size: 18px;
-  color: #e74d31;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 20px;
+}
+
+.totalAmount {
+  color: #3182ce;
 }
 
 .continueButton {
   width: 100%;
-  padding: 12px;
-  margin-top: 16px;
-  background-color: #e74d31;
-  color: white;
+  padding: 14px;
+  background: linear-gradient(to right, #4299e1, #667eea);
   border: none;
-  border-radius: 4px;
-  font-weight: 500;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .continueButton:hover {
-  background-color: #d43e23;
+  background: linear-gradient(to right, #3182ce, #5a67d8);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.policyNote {
+  margin-top: 16px;
+  font-size: 12px;
+  color: #718096;
+  line-height: 1.6;
+}
+
+.policyNote a {
+  color: #4299e1;
+  text-decoration: none;
+}
+
+.policyNote a:hover {
+  text-decoration: underline;
+}
+
+/* Default styling for the placeholder components */
+.vehicle, .editLink, .singleCover, .customPolicyOption, .totalSection, .continueButton {
+  /* Keep existing styles as fallbacks */
 } 

@@ -1,25 +1,18 @@
-import React from 'react'
+import React from 'react';
+import Common from '../Common/Common';
 import Month from './Month';
-import Header from "../../Header/Header"
-import Common from "../Common/Common"
-import Dynamic from "../Dynamic/Dynamic"
-import style from "../cars.module.css"
+import Dynamic from '../Dynamic/Dynamic';
 
 function Routemonth() {
-    return (
-      <div>
-        <Header />
+  return (
+    <div className="app">
+      <div className="flex">
         <Common />
-        <div className={style.divflex}>
-          <div className={style.flexdiv1}>
-         <Month/>
-          </div>
-          <div className={style.flexdiv2}>
-            <Dynamic />
-          </div>
-        </div>
+        <Month />
+        <Dynamic />
       </div>
-    );
+    </div>
+  );
 }
 
-export default Routemonth
+export default Routemonth;

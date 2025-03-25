@@ -21,6 +21,20 @@ import Login from "../components/Auth/Login";
 import Register from "../components/Auth/Register";
 import Dashboard from "../components/Dashboard/Dashboard";
 import AuthService from "../services/auth.service";
+import MainLayout from "../components/Layout/MainLayout";
+import RouteBikePincode from "../components/Bikes/Pincode/Routepincode";
+import RouteUseofbike from "../components/Bikes/Useofbike/Routeuseofbike";
+import RouteBikeNumber from "../components/Bikes/BikeNumber/RouteBikeNumber";
+import RouteBikeDetails from "../components/Bikes/BikeDetails/RouteBikeDetails";
+import RouteBikeExpiry from "../components/Bikes/BikeExpiry/RouteBikeExpiry";
+import RouteBikePlans from "../components/Bikes/Plans/RouteBikePlans";
+import RouteBikeCustomPolicy from "../components/Bikes/CustomPolicy/RouteBikeCustomPolicy";
+import RouteBikeAdditionalDetails from "../components/Bikes/AdditionalDetails/RouteBikeAdditionalDetails";
+import RouteHealthPlans from "../components/Health/Plans/RouteHealthPlans";
+import RouteHealthAdditionalDetails from "../components/Health/AdditionalDetails/RouteHealthAdditionalDetails";
+import RouteHealthProfile from "../components/Health/Profile/RouteHealthProfile";
+import RouteHealthMedicalInfo from "../components/Health/MedicalInfo/RouteHealthMedicalInfo";
+import HealthCustomPlan from '../components/Health/CustomPlan/HealthCustomPlan';
 
 // Protected Route component
 const ProtectedRoute = ({ component: Component, ...rest }) => (
@@ -28,7 +42,9 @@ const ProtectedRoute = ({ component: Component, ...rest }) => (
     {...rest}
     render={(props) =>
       AuthService.isLoggedIn() ? (
-        <Component {...props} />
+        <MainLayout>
+          <Component {...props} />
+        </MainLayout>
       ) : (
         <Redirect
           to={{
@@ -41,95 +57,71 @@ const ProtectedRoute = ({ component: Component, ...rest }) => (
   />
 );
 
+// Public route with layout
+const PublicRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) => (
+      <MainLayout>
+        <Component {...props} />
+      </MainLayout>
+    )}
+  />
+);
+
 function Routes() {
   return (
-    <>
-      <Switch>
-        {/* Public Routes */}
-        <Route path="/" exact>
-          <Home />
-        </Route>
+    <Switch>
+      {/* Public Routes */}
+      <PublicRoute path="/" exact component={Home} />
 
-        {/* Authentication Routes */}
-        <Route path="/login" exact>
-          <Login />
-        </Route>
+      {/* Authentication Routes */}
+      <PublicRoute path="/login" exact component={Login} />
+      <PublicRoute path="/register" exact component={Register} />
 
-        <Route path="/register" exact>
-          <Register />
-        </Route>
+      {/* Protected Dashboard Routes */}
+      <ProtectedRoute path="/dashboard" exact component={Dashboard} />
 
-        {/* Protected Dashboard Routes */}
-        <ProtectedRoute path="/dashboard" exact component={Dashboard} />
+      {/* Car Routes */}
+      <PublicRoute path="/cars/useofcar" exact component={Routeuseofcar} />
+      <PublicRoute path="/cars/pincode" exact component={Routepincode} />
+      <PublicRoute path="/cars/carnumber" exact component={Routecarnumber} />
+      <PublicRoute path="/cars/year" exact component={Routeyear} />
+      <PublicRoute path="/cars/month" exact component={Routemonth} />
+      <PublicRoute path="/cars/cartype" exact component={Routecartype} />
+      <PublicRoute path="/cars/expiry" exact component={Routeexpiry} />
+      <PublicRoute path="/cars/policy" exact component={Routepolicy} />
+      <PublicRoute path="/cars/cardetail" exact component={Routecardetail} />
 
-        {/* Car Routes */}
-        <Route path="/cars/useofcar" exact>
-          <Routeuseofcar />
-        </Route>
-
-        <Route path="/cars/pincode" exact>
-          <Routepincode />
-        </Route>
-        <Route path="/cars/carnumber" exact>
-          <Routecarnumber />
-        </Route>
-
-        <Route path="/cars/year" exact>
-          <Routeyear />
-        </Route>
-
-        <Route path="/cars/month" exact>
-          <Routemonth />
-        </Route>
-
-        <Route path="/cars/cartype" exact>
-          <Routecartype />
-        </Route>
-
-        <Route path="/cars/expiry" exact>
-          <Routeexpiry />
-        </Route>
-
-        <Route path="/cars/policy" exact>
-          <Routepolicy />
-        </Route>
-
-        <Route path="/cars/cardetail" exact>
-          <Routecardetail />
-        </Route>
-
-        {/* Plan Routes */}
-        <Route path="/plans">
-          <DifferentPlanOptions />
-        </Route>
-        
-        <Route path="/custom-policy">
-          <CustomPolicyBuilder />
-        </Route>
-        
-        <Route path="/additionalCovers">
-          <AdditionalCovers />
-        </Route>
-        <Route path="/addtional-details">
-          <AddtionalDetails />
-        </Route>
-
-        <Route path="/final-details">
-          <FinalDetails />
-        </Route>
-        <Route path="/cardPayment" exact>
-          <CardPayment />
-        </Route>
-        <Route path="/successfull" exact>
-          <Paysuccessfull />
-        </Route>
-        
-        {/* 404 Route */}
-        <Route>
-          <h1>404: Page not found</h1>
-        </Route>
-      </Switch>
-    </>
+      {/* Plan Routes */}
+      <PublicRoute path="/plans" exact component={DifferentPlanOptions} />
+      <PublicRoute path="/custom-policy" exact component={CustomPolicyBuilder} />
+      <PublicRoute path="/additionalCovers" exact component={AdditionalCovers} />
+      <PublicRoute path="/addtional-details" exact component={AddtionalDetails} />
+      <PublicRoute path="/final-details" exact component={FinalDetails} />
+      <PublicRoute path="/cardPayment" exact component={CardPayment} />
+      <PublicRoute path="/successfull" exact component={Paysuccessfull} />
+      
+      {/* Bike Routes */}
+      <PublicRoute path="/bikes/pincode" exact component={RouteBikePincode} />
+      <PublicRoute path="/bikes/bikenumber" exact component={RouteBikeNumber} />
+      <PublicRoute path="/bikes/useofbike" exact component={RouteUseofbike} />
+      <PublicRoute path="/bikes/bikedetails" exact component={RouteBikeDetails} />
+      <PublicRoute path="/bikes/bikeexpiry" exact component={RouteBikeExpiry} />
+      <PublicRoute path="/bikes/plans" exact component={RouteBikePlans} />
+      <PublicRoute path="/bikes/custom-policy" exact component={RouteBikeCustomPolicy} />
+      <PublicRoute path="/bikes/additional-details" exact component={RouteBikeAdditionalDetails} />
+      
+      {/* Health Routes */}
+      <PublicRoute path="/health/profile" exact component={RouteHealthProfile} />
+      <PublicRoute path="/health/medical-info" exact component={RouteHealthMedicalInfo} />
+      <PublicRoute path="/health/plans" exact component={RouteHealthPlans} />
+      <PublicRoute path="/health/additional-details" exact component={RouteHealthAdditionalDetails} />
+      <PublicRoute path="/health/custom-plan" exact component={HealthCustomPlan} />
+      
+      {/* 404 Route */}
+      <PublicRoute path="*" component={() => <h1>404: Page not found</h1>} />
+    </Switch>
   );
 }
 

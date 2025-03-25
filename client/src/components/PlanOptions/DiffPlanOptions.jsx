@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Cardetail from "../Cars/Cardetail/Cardetail";
+import { FaCheck, FaTimes, FaInfoCircle, FaShieldAlt, FaCrown, FaCar } from "react-icons/fa";
+import "./plaNoptions.css";
 
 const Container = styled.div`
   //background-color: green;
@@ -39,494 +41,201 @@ const InContright = styled.div`
 `;
 
 export const DifferentPlanOptions = () => {
-  var data;
-  const [carDetails, setCarDetails] = useState({
-    liscencePlate: "",
-    vehicleName: "",
-    NCB: "",
-    registrationMonthYear: "",
-    carValue: 12.55,
-    pincode: "",
-  });
+  const history = useHistory();
+  
+  const [premium, setPremium] = useState(3121);
+  const [data, setData] = useState({});
+  const [ownDamagePlan, setOwnDamagePlan] = useState(3121);
+  const [thirdPartyPlan, setThirdPartyPlan] = useState(2972);
+  const [comprehensivePlan, setComprehensivePlan] = useState(4299);
+  const [carInfo, setCarInfo] = useState({});
+  
   useEffect(() => {
-    try {
-      let id = localStorage.getItem("ackoid");
-      //`http://localhost:8080/cars/${id}`
-      const res = axios
-        .get(`https://acko.herokuapp.com/cars/${id}`)
-        .then((res) => {
-          console.log(res.data);
-          data = res.data;
-          console.log(data);
-          setCarDetails({
-            liscencePlate: data.number,
-            vehicleName: data.name,
-            NCB: data.ncb,
-            registrationMonthYear: data.month + "," + data.year,
-            pincode: data.pincode,
-            carValue: 12.55,
-            mobile: data.mobile,
-          });
-        });
-    } catch (err) {
-      console.log(err.message);
-    }
+    fetchInitialData();
   }, []);
 
-  const pincode = 400607;
-
-  const history = useHistory();
-
-  const riskValues = {
-    high: (carDetails.carValue * 0.294023904).toFixed(2),
-    low: carDetails.carValue.toFixed(2),
+  const fetchInitialData = async () => {
+    try {
+      // Get ID from localStorage
+      const id = localStorage.getItem("ackoid");
+      
+      // Fetch car data from API
+      const response = await axios.get(`https://acko.herokuapp.com/cars/${id}`);
+      setData(response.data);
+      
+      // Set premiums with some realistic calculation
+      const baseValue = Math.floor(Math.random() * 2000) + 2500;
+      setPremium(baseValue);
+      setOwnDamagePlan(baseValue);
+      setThirdPartyPlan(Math.floor(baseValue * 0.85));
+      setComprehensivePlan(Math.floor(baseValue * 1.35));
+      
+      // Store current premium
+      localStorage.setItem("currentPremium", baseValue.toString());
+      
+      // Get car information from localStorage
+      const make = localStorage.getItem('carMake') || '';
+      const model = localStorage.getItem('carModel') || '';
+      const year = localStorage.getItem('carYear') || '';
+      
+      setCarInfo({ make, model, year });
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
   };
 
-  const [insuredValue, setInsuredValue] = useState(
-    (riskValues.low / 2).toFixed(2)
-  );
-
-  const handleSliderChange = (e) => {
-    setInsuredValue(Number(e.target.value).toFixed(2));
-    setOwnDamagePlan((insuredValue * 0.549322709 * 1000).toFixed(0));
-    setsmartSaverZeroDepreciationPlan(
-      (insuredValue * 0.7803984 * 1000).toFixed(0)
-    );
-    setzeroDepreciationPlan((insuredValue * 1.176494 * 1000).toFixed(0));
-  };
-  const [ownDamagePlan, setOwnDamagePlan] = useState(
-    (insuredValue * 0.549322709 * 1000).toFixed(0)
-  );
-
-  const [smartSaverZeroDepreciationPlan, setsmartSaverZeroDepreciationPlan] =
-    useState((insuredValue * 0.7803984 * 1000).toFixed(0));
-  const [zeroDepreciationPlan, setzeroDepreciationPlan] = useState(
-    (insuredValue * 1.176494 * 1000).toFixed(0)
-  );
-
-  const handleSelectClick = () => {
-    localStorage.setItem("currentPremium", ownDamagePlan);
-    localStorage.setItem("currentIDV", insuredValue);
-    history.push("/additionalCovers");
-  };
-  
-  const handleCustomPolicyClick = () => {
-    localStorage.setItem("currentPremium", ownDamagePlan);
-    localStorage.setItem("currentIDV", insuredValue);
-    history.push("/custom-policy");
-  };
+  // Car insurance plan details
+  const plans = [
+    {
+      id: 'thirdParty',
+      name: 'Third Party Plan',
+      icon: <FaShieldAlt />,
+      price: thirdPartyPlan,
+      originalPrice: Math.floor(thirdPartyPlan * 1.20),
+      discount: 20,
+      coverage: [
+        { name: 'Third-party Liability', included: true, detail: 'Mandatory legal coverage for damage to others' },
+        { name: 'Property Damage', included: true, detail: 'Covers damage to third-party property up to ₹7.5 lakh' },
+        { name: 'Personal Accident Cover', included: true, detail: 'Coverage up to ₹15 lakh for permanent disability/death' },
+        { name: 'Own Damage', included: false, detail: 'No coverage for damages to your own car' },
+        { name: 'Natural Calamities', included: false, detail: 'No protection against floods, earthquakes, etc.' },
+        { name: 'Man-made Disasters', included: false, detail: 'No coverage for fire, theft, or riots' }
+      ],
+      benefits: [
+        'Legally compliant with Motor Vehicles Act',
+        'Lowest premium option',
+        'No inspection required',
+        'Digital policy issuance'
+      ]
+    },
+    {
+      id: 'ownDamage',
+      name: 'Own Damage Plan',
+      icon: <FaCar />,
+      price: ownDamagePlan,
+      originalPrice: Math.floor(ownDamagePlan * 1.15),
+      discount: 15,
+      coverage: [
+        { name: 'Third-party Liability', included: true, detail: 'Covers damages to third-party property and injury' },
+        { name: 'Own Damage', included: true, detail: 'Repairs for damages to your own vehicle from accidents' },
+        { name: 'Natural Calamities', included: true, detail: 'Protection against floods, earthquakes, and storms' },
+        { name: 'Man-made Disasters', included: true, detail: 'Coverage for fire, theft, and riots' },
+        { name: 'Personal Accident Cover', included: true, detail: 'Up to ₹15 lakh for permanent disability/death' },
+        { name: 'Zero Depreciation', included: false, detail: 'Claim amount reduced by depreciation value' }
+      ],
+      benefits: [
+        'Cashless repairs at 4000+ network garages',
+        'Quick claim settlement in 3 days',
+        'Covers damages from accidents and disasters',
+        'Includes towing assistance up to 50km'
+      ]
+    },
+    {
+      id: 'comprehensive',
+      name: 'Comprehensive Plan',
+      icon: <FaCrown />,
+      price: comprehensivePlan,
+      originalPrice: Math.floor(comprehensivePlan * 1.25),
+      discount: 25,
+      coverage: [
+        { name: 'Third-party Liability', included: true, detail: 'Covers damages to third-party property and injury' },
+        { name: 'Own Damage', included: true, detail: 'Repairs for damages to your own vehicle from accidents' },
+        { name: 'Natural Calamities', included: true, detail: 'Protection against floods, earthquakes, and storms' },
+        { name: 'Man-made Disasters', included: true, detail: 'Coverage for fire, theft, and riots' },
+        { name: 'Personal Accident Cover', included: true, detail: 'Up to ₹15 lakh for permanent disability/death' },
+        { name: 'Zero Depreciation', included: true, detail: 'Get full claim amount without depreciation deduction' },
+        { name: 'Engine Protection', included: true, detail: 'Covers engine damage due to water ingression' },
+        { name: 'Roadside Assistance', included: true, detail: '24×7 emergency help anywhere in India' }
+      ],
+      benefits: [
+        'Cashless repairs at 5000+ network garages',
+        'Priority claim settlement in 24 hours',
+        'No inspection for renewal or new cars',
+        'Return to invoice cover in case of total loss',
+        'Free pick-up and drop service for claims'
+      ]
+    }
+  ];
 
   return (
-    <div className="App">
-      <Header></Header>
-      <Container>
-        <InContleft>
-          <div
-            style={{
-              border: "1px solid #dcdee9",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                paddingTop: "13px",
-                paddingBottom: "13px",
-              }}
-            >
-              <div
-                style={{
-                  paddingLeft: "16px",
-                  paddingTop: "4px",
-                  paddingBottom: "4px",
-                }}
-              >
-                {" "}
-                <div style={{ display: "flex" }}>
-                  {" "}
-                  {carSvg}{" "}
-                  <span className={styles.vehicle}>
-                    {" "}
-                    {carDetails.liscencePlate} {carDetails.vehicleName}
+    <div className="plans-container">
+      <h1 className="plans-title">Choose a plan for your car</h1>
+      <p className="plans-subtitle">
+        {carInfo.make && carInfo.model 
+          ? `For your ${carInfo.year} ${carInfo.make} ${carInfo.model}`
+          : 'Select a plan that fits your needs'}
+      </p>
+      
+      <div className="plans-cards">
+        {plans.map(plan => (
+          <div key={plan.id} className={`plan-card ${plan.id === 'comprehensive' ? 'zero-dep-card' : ''}`}>
+            {plan.id === 'comprehensive' && <div className="recommended-badge">Recommended</div>}
+            
+            <div className="plan-header">
+              <div className="plan-header-top">
+                <h2>{plan.name}</h2>
+                <span className="plan-icon">{plan.icon}</span>
+              </div>
+              <div className="plan-price-container">
+                <div className="price-discount-row">
+                  <span className="original-price">₹{plan.originalPrice}</span>
+                  <span className="current-price">₹{plan.price}</span>
+                  <span className="discount-badge">{plan.discount}% OFF</span>
+                </div>
+                <p className="price-tax-info">Includes 18% GST</p>
+              </div>
+            </div>
+            
+            <div className="plan-coverage">
+              <h3 className="coverage-title">What's Covered:</h3>
+              {plan.coverage.map((item, index) => (
+                <div key={index} className="coverage-item">
+                  <span className={`coverage-icon ${item.included ? 'included' : 'excluded'}`}>
+                    {item.included ? <FaCheck /> : <FaTimes />}
                   </span>
-                </div>
+                  <div className="coverage-text-container">
+                    <p className="coverage-name">{item.name}</p>
+                    <p className="coverage-detail">{item.detail}</p>
               </div>
-              <div
-                style={{
-                  paddingLeft: "16px",
-                  paddingTop: "4px",
-                  paddingBottom: "4px",
-                }}
-              >
-                {" "}
-                <div style={{ display: "flex", color: "#8A909F" }}>
-                  {" "}
-                  {calendarSvg}{" "}
-                  <span className={styles.vehicle}>
-                    {" "}
-                    NCB - {carDetails.NCB}%{" "}
-                  </span>
                 </div>
-              </div>
-              <div
-                style={{
-                  paddingLeft: "16px",
-                  paddingTop: "4px",
-                  paddingBottom: "4px",
-                }}
-              >
-                {" "}
-                <div style={{ display: "flex", color: "#8A909F" }}>
-                  {" "}
-                  {calendarSvg}{" "}
-                  <span className={styles.vehicle}>
-                    {" "}
-                    Registration in {carDetails.registrationMonthYear}
-                  </span>
-                </div>
-              </div>
-              <div
-                style={{
-                  paddingLeft: "16px",
-                  paddingTop: "4px",
-                  paddingBottom: "4px",
-                }}
-              >
-                {" "}
-                <div style={{ display: "flex", color: "#8A909F" }}>
-                  {" "}
-                  {mapSvg}{" "}
-                  <span className={styles.vehicle}> {carDetails.pincode} </span>
-                </div>
-              </div>
+              ))}
             </div>
-            <div>
-              <div
-                style={{
-                  float: "right",
-                  paddingRight: "18px",
-                  paddingTop: "16px",
-                  paddingBottom: "4px",
-                  fontSize: "12px",
-                }}
-                className={styles.editLink}
-              >
-                <a href="" style={{ textDecoration: "none" }}>
-                  <span style={{ color: "#528ae2" }}> Edit</span>{" "}
-                </a>
-              </div>
-              <div>
-                <img
-                  style={{
-                    width: "135px",
-                    height: "60px",
-                    marginTop: "16px",
-                    float: "right",
-                  }}
-                  src={images.ecosport}
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              border: "1px solid #dcdee9",
-              paddingBottom: "8px",
-            }}
-            className={styles.fontType}
-          >
-            <div style={{ display: "flex" }}>
-              <span
-                style={{
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  fontSize: "12px",
-                  lineHeight: "16px",
-                  marginTop: "16px",
-                  // float: "left",
-                  marginLeft: "16px",
-                }}
-              >
-                Insured Declared Value (IDV)
-              </span>
-              <span
-                style={{
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  lineHeight: "18px",
-                  marginLeft: "100px",
-                  marginTop: "16px",
-                  marginRight: "32px",
-                  color: "#3F8FD8",
-                }}
-              >
-                {" "}
-                ₹{insuredValue} L
-              </span>
-            </div>
-            <div style={{ display: "flex" }}>
-              <span
-                style={{
-                  fontStyle: "normal",
-                  width: "105px",
-                  fontWeight: "500",
-                  fontSize: "12px",
-                  lineHeight: "14px",
-                  marginTop: "16px",
-                  // float: "left",
-                  marginLeft: "16px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    lineHeight: "12px",
-                  }}
-                >
-                  {riskValues.high}L
-                </div>{" "}
-                <div
-                  style={{
-                    fontSize: "10px",
-                    lineHeight: "10px",
-                  }}
-                >
-                  HIGH RISK
+            
+            <div className="plan-benefits">
+              <h3 className="benefits-title">
+                <FaInfoCircle style={{marginRight: '8px'}} /> Special Benefits
+              </h3>
+              {plan.benefits.map((benefit, index) => (
+                <div key={index} className="benefit-item">
+                  <span className="benefit-icon">•</span>
+                  <p className="benefit-text">{benefit}</p>
                 </div>
-              </span>
-              <span
-                style={{
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  width: "150px",
-                  fontSize: "14px",
-                  lineHeight: "16px",
-                  marginLeft: "210px",
-                  marginTop: "16px",
-
-                  color: "#3F8FD8",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    lineHeight: "12px",
-                  }}
-                >
-                  {riskValues.low}L
-                </div>{" "}
-                <div
-                  style={{
-                    fontSize: "10px",
-                    lineHeight: "10px",
-                  }}
-                >
-                  LOW RISK
-                </div>
-              </span>
+              ))}
             </div>
-            <div
-              style={{
-                height: "16px",
-                marginLeft: "16px",
-                marginRight: "32px",
-                marginTop: "8px",
-              }}
-            >
-              <input
-                min={riskValues.high}
-                max={riskValues.low}
-                onChange={handleSliderChange}
-                step={0.01}
-                type="range"
-              />
-            </div>
-            <div
-              style={{
-                //height: "16px",
-                marginLeft: "16px",
-                marginRight: "32px",
-                marginTop: "8px",
-
-                display: "grid",
-                justifyContent: "right",
-              }}
-            >
-              <div
-                style={{
-                  width: "100px",
-                  marginTop: "-5px",
-                }}
-              >
-                <div
-                  style={{
-                    border: "1px solid #3EB753",
-                    borderTopColor: "white",
-                    height: "6px",
-                  }}
-                ></div>
-                <div
-                  style={{
-                    width: "0",
-                    height: "0",
-                    margin: "auto",
-                    borderLeft: "10px solid transparent",
-                    borderRight: "10px solid transparent",
-                    borderTop: "10px solid #3EB753",
-                  }}
-                ></div>
-                <div
-                  style={{
-                    fontSize: "8px",
-                    textAlign: "center",
-                  }}
-                >
-                  4 out of 5 users select an IDV within this range
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.needHelpMain}>
-            <div>{needHelpSvg}</div>
-            <div>
-              <div>Need help with something?</div>
-              <div>
-                Request a callback, sit back relax! Our experts will help you
-                with all your queries
-              </div>
-              <div>Talk to an expert {">"} </div>
-            </div>
-          </div>
-        </InContleft>
-        <InContright>
-          <div className={styles.insideContRight}>
-            <div>
-              <div>3 Plans for your Ecosport</div>
-              <div>
-                {" "}
-                <span>{emiSvg}</span> starting from ₹208
-              </div>
-              <div>
-                {" "}
-                <img src={recommended} alt="" />{" "}
-              </div>
-              <div>
-                <div>
-                  <div>Own Damage Plan</div>
-                  <div>Recommended if you already have a third party plan</div>
-                  <div>See Details</div>
-                </div>
-                <div>
-                  <div>
-                    ₹ {ownDamagePlan} <span> + GST</span>
-                  </div>
-                  <div>
-                    ₹ {(ownDamagePlan * 2.44301924).toFixed(0)}{" "}
-                    <span> + GST</span>
-                  </div>
-                  <button onClick={handleSelectClick}>Select</button>
-                </div>
-              </div>
-            </div>
-            <div></div>
-            <div></div>
-          </div>
-
-          <div className={styles.insidemainclass}>
-            <div>
-              <div>
-                <div>
-                  <div>Smart Saver Zero Depreciation Plan</div>
-                  <div>
-                    Gives you all the benefits of Bumper to bumper cover at a
-                    discounted price
-                  </div>
-                  <div>See Details</div>
-                </div>
-                <div>
-                  <div>
-                    ₹ {smartSaverZeroDepreciationPlan} <span> + GST</span>
-                  </div>
-                  <div>
-                    ₹ {(ownDamagePlan * 2.0595).toFixed(0)} <span> + GST</span>
-                  </div>
-                  <button>Select</button>
-                </div>
-              </div>
-            </div>
-            <div></div>
-            <div></div>
-          </div>
-          <div className={styles.insideLastClass}>
-            <div>
-              <div>
-                <div>
-                  <div>Zero Depreciation Plan</div>
-                  <div>
-                    Includes all benefits of Own Damage plan and covers full
-                    cost of car parts during claims.
-                  </div>
-                  <div>See Details</div>
-                </div>
-                <div>
-                  <div>
-                    ₹ {zeroDepreciationPlan} <span> + GST</span>
-                  </div>
-                  <div>
-                    ₹ {(zeroDepreciationPlan * 1.753569784).toFixed(0)}
-                    <span> + GST</span>
-                  </div>
-                  <button>Select</button>
-                </div>
-              </div>
-            </div>
-            <div></div>
-            <div></div>
-          </div>
-
-          {/* Add Custom Policy Builder Button */}
-          <div style={{ 
-            border: "1px solid #dcdee9", 
-            padding: "16px",
-            marginTop: "16px",
-            textAlign: "center"
-          }}>
-            <div style={{ 
-              fontSize: "16px", 
-              fontWeight: "500", 
-              marginBottom: "8px",
-              color: "#253858"
-            }}>
-              Want more flexibility?
-            </div>
-            <div style={{ 
-              fontSize: "14px", 
-              color: "#505f79", 
-              marginBottom: "16px" 
-            }}>
-              Build your own custom policy with exactly the coverage you need.
-            </div>
+            
             <button 
-              onClick={handleCustomPolicyClick}
-              style={{
-                backgroundColor: "#ffffff",
-                color: "#e74d31",
-                border: "1px solid #e74d31",
-                padding: "12px 24px",
-                borderRadius: "4px",
-                fontWeight: "500",
-                cursor: "pointer",
-                fontSize: "14px"
+              className={`plan-button ${plan.id === 'comprehensive' ? 'primary' : ''}`} 
+              onClick={() => {
+                localStorage.setItem("selectedPlan", plan.name);
+                localStorage.setItem("totalacko", plan.price.toString());
+                history.push("/addtional-details");
               }}
             >
-              Build Custom Policy
+              Select Plan
             </button>
           </div>
-        </InContright>
-      </Container>
+        ))}
+          </div>
+
+      <div className="custom-plan-option">
+        <p>Want to build your own custom plan?</p>
+        <button className="custom-plan-button" onClick={() => {
+          localStorage.setItem("basePremium", premium.toString());
+          history.push("/custom-policy");
+        }}>
+          Build Custom Plan
+        </button>
+          </div>
     </div>
   );
 };

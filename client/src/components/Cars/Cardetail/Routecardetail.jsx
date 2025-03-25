@@ -1,25 +1,18 @@
-import React from 'react'
-import style from "../cars.module.css"
+import React from 'react';
+import Common from '../Common/Common';
 import Cardetail from './Cardetail';
-import Header from "../../Header/Header"
-import Common from "../Common/Common"
-import Dynamic from "../Dynamic/Dynamic"
+import Dynamic from '../Dynamic/Dynamic';
 
 function Routecardetail() {
-    return (
-      <div>
-        <Header />
+  return (
+    <div className="app">
+      <div className="flex">
         <Common />
-        <div className={style.divflex}>
-          <div className={style.flexdiv1}>
-          <Cardetail/>
-          </div>
-          <div className={style.flexdiv2}>
-            <Dynamic />
-          </div>
-        </div>
+        <Cardetail />
+        <Dynamic />
       </div>
-    );
+    </div>
+  );
 }
 
-export default Routecardetail
+export default Routecardetail;

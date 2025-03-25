@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import Header from "../Header/Header";
 import {
   cardNumberSvg,
   cardSvg,
@@ -97,7 +96,6 @@ export const CardPayment = () => {
   
   return (
     <div>
-      <Header />
       <div className={styles.mainContainer}>
         <div>
           <SIdeDiv svg={cardSvg} text={"Credit/Debit Card"} />

@@ -20,7 +20,7 @@ const Nav2 = ({ isLoggedIn, handleLogout }) => {
                         <button onClick={handleLogout} className="mobile-logout-btn">
                             <FaSignOutAlt style={{ marginRight: '10px' }} /> Logout
                         </button>
-                        <hr />
+                        <div className="mobile-nav-divider"></div>
                     </div>
                 ) : (
                     <div className="mobile-nav-section">
@@ -31,7 +31,7 @@ const Nav2 = ({ isLoggedIn, handleLogout }) => {
                         <Link to="/register" className="mobile-nav-link">
                             <FaUserPlus style={{ marginRight: '10px' }} /> Register
                         </Link>
-                        <hr />
+                        <div className="mobile-nav-divider"></div>
                     </div>
                 )}
 
@@ -40,29 +40,23 @@ const Nav2 = ({ isLoggedIn, handleLogout }) => {
                     <Link to="/cars/useofcar" className="mobile-nav-link">
                         <FaCar style={{ marginRight: '10px' }} /> Car Insurance
                     </Link>
-                    <Link to="/bikes" className="mobile-nav-link">
+                    <Link to="/bikes/pincode" className="mobile-nav-link">
                         <FaMotorcycle style={{ marginRight: '10px' }} /> Bike Insurance
                     </Link>
                     <Link to="/health" className="mobile-nav-link">
                         <FaHeartbeat style={{ marginRight: '10px' }} /> Health Insurance
                     </Link>
-                    <hr />
+                    <div className="mobile-nav-divider"></div>
                 </div>
                 
                 <div className="mobile-nav-section">
                     <h3>Support</h3>
-                    <Link to="/help" className="mobile-nav-link">
-                        <FaHeadset style={{ marginRight: '10px' }} /> Help Center
-                    </Link>
                     <Link to="/about" className="mobile-nav-link">
                         <FaInfoCircle style={{ marginRight: '10px' }} /> About Us
                     </Link>
-                    <hr />
-                </div>
-                
-                <div className="mobile-nav-section">
-                    <p className="mobile-nav-disclaimer">Trade logo displayed above belongs to ACKO Technology & Services Pvt Ltd and used by ACKO General insurance Limited under License.</p>
-                    <p className="mobile-nav-disclaimer">For more details on risk factors, terms, conditions and exclusions, please read the policy wordings carefully before concluding a sale.</p>
+                    <Link to="/help" className="mobile-nav-link">
+                        <FaHeadset style={{ marginRight: '10px' }} /> Help Center
+                    </Link>
                 </div>
             </div>
         </div>

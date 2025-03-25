@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import style from "./paysuccessfull.module.css"
-import Header from "../Header/Header"
 import { Link, useHistory } from "react-router-dom"
 import PolicyService from '../../services/policy.service'
 import AuthService from '../../services/auth.service'
@@ -53,14 +52,32 @@ function Paysuccessfull() {
   }, []);
 
   const handleContinue = () => {
-    // Clear only the car data, not the user authentication
+    // Clear vehicle data but not user authentication
+    // Clear car data
     localStorage.removeItem("ackoid");
     localStorage.removeItem("totalacko");
     localStorage.removeItem("carNumber");
     localStorage.removeItem("carMake");
     localStorage.removeItem("carModel");
     localStorage.removeItem("carYear");
+    
+    // Clear bike data
+    localStorage.removeItem("bikeNumber");
+    localStorage.removeItem("bikeMake");
+    localStorage.removeItem("bikeModel");
+    localStorage.removeItem("bikeYear");
+    localStorage.removeItem("bikeUse");
+    localStorage.removeItem("bikePincode");
+    localStorage.removeItem("bikeUserData");
+    localStorage.removeItem("selectedBikePlan");
+    localStorage.removeItem("selectedBikeCoverages");
+    localStorage.removeItem("bikeTotalPremium");
+    localStorage.removeItem("bikePolicyStatus");
+    localStorage.removeItem("bikePolicyExpiryDate");
+    
+    // Clear common data
     localStorage.removeItem("policyType");
+    localStorage.removeItem("vehicleType");
     localStorage.removeItem("paCover");
     localStorage.removeItem("consumablesCover");
     localStorage.removeItem("zeroDepreciation");
@@ -69,6 +86,9 @@ function Paysuccessfull() {
     localStorage.removeItem("ncbDiscount");
     localStorage.removeItem("currentPremium");
     localStorage.removeItem("currentIDV");
+    
+    // Remove the policy creation flag
+    sessionStorage.removeItem("policy_created");
     
     // Redirect to dashboard if logged in, otherwise to home
     if (AuthService.isLoggedIn()) {
@@ -80,8 +100,6 @@ function Paysuccessfull() {
 
   return (
     <div>
-      <Header></Header>
-     
       <div
         style={{
           alignItems: "center",

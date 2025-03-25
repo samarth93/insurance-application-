@@ -1,59 +1,51 @@
-import React, { useState } from 'react'
-import style from "./carnumber.module.css"
-import axios from "axios"
-import {Link} from "react-router-dom"
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from "axios";
+import style from "./carnumber.module.css";
 
 function Carnumber() {
-
-const [number,setNumber]=useState("")
+    const [number, setNumber] = useState("");
+    
+    const handleContinue = async () => {
+        try {
+            const id = localStorage.getItem("ackoid");
+            if (!id) {
+                console.error("No car ID found in localStorage");
+                return;
+            }
+            
+            const data = { number: number };
+            await axios.patch(`https://acko.herokuapp.com/cars/${id}`, data);
+            console.log("Car number updated successfully");
+        } catch (error) {
+            console.error("Error updating car number:", error);
+        }
+    };
 
     return (
-      <div>
-        <div
-          style={{
-            fontStyle: "normal",
-            fontWeight: "bold",
-            fontSize: "24px",
-            lineHeight: "28px",
-          }}
-        >
-          Enter your car number{" "}
-        </div>
-        <p
-          style={{
-            fontStyle: "normal",
-            fontWeight: "normal",
-            fontSize: "12px",
-            lineHeight: "12px",
-          }}
-        >
-          This makes your purchase twice as fast
-        </p>
+      <div className={style.carnumberContainer}>
+        <h2 className={style.title}>Enter your car number</h2>
+        <p className={style.subtitle}>This makes your purchase twice as fast</p>
+        
         <input
-          onChange={(e) => {
-            setNumber(e.target.value);
-          }}
+          onChange={(e) => setNumber(e.target.value)}
           className={style.pininput}
           placeholder="TN74AQ5553"
+          value={number}
         />
-        <Link to="/cars/year" >
-         
-          <div style={{ marginTop: "15px" }}>
+        
+        <div className={style.buttonContainer}>
+          <Link to="/cars/year">
             <button
-              onClick={async () => {
-                const id = localStorage.getItem("ackoid");
-                const data = { number: number };
-                // await axios.patch(`http://localhost:8080/cars/${id}`, data);
-                 await axios.patch(`https://acko.herokuapp.com/cars/${id}`, data);
-              }}
+              onClick={handleContinue}
               className={style.pinbtn}
             >
               Continue
             </button>
-          </div>
-        </Link>
+          </Link>
+        </div>
       </div>
     );
 }
 
-export default Carnumber
+export default Carnumber;

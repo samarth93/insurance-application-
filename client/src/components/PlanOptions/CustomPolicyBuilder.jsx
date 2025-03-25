@@ -20,6 +20,7 @@ import { images } from "./assets/imgs";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { FaShieldAlt, FaCar, FaFire, FaTint, FaUserSecret, FaTools, FaRegCreditCard, FaUserShield, FaUsers, FaExchangeAlt, FaCheck } from "react-icons/fa";
 
 const Container = styled.div`
   width: 752px;
@@ -215,171 +216,250 @@ const PriceAdjustment = styled.div`
 `;
 
 export const CustomPolicyBuilder = () => {
-  var data;
-  const [carDetails, setCarDetails] = useState({
-    liscencePlate: "",
-    vehicleName: "",
-    NCB: "",
-    registrationMonthYear: "",
-    pincode: "",
-    carValue: 12.55,
-  });
-
-  useEffect(() => {
-    try {
-      let id = localStorage.getItem("ackoid");
-      const res = axios
-        .get(`https://acko.herokuapp.com/cars/${id}`)
-        .then((res) => {
-          console.log(res.data);
-          data = res.data;
-          console.log(data);
-          setCarDetails({
-            liscencePlate: data.number,
-            vehicleName: data.name,
-            NCB: data.ncb,
-            registrationMonthYear: data.month + "," + data.year,
-            pincode: data.pincode,
-            carValue: 12.55,
-            mobile: data.mobile,
-          });
-        });
-    } catch (err) {
-      console.log(err.message);
-    }
-  }, []);
-
   const history = useHistory();
   
-  // Base coverage amount (IDV)
-  const [insuredValue, setInsuredValue] = useState(
-    localStorage.getItem("currentIDV") ? Number(localStorage.getItem("currentIDV")) : 6.28
-  );
+  // Basic state for policy customization
+  const [coverageOptions, setCoverageOptions] = useState([
+    { 
+      id: 'thirdParty', 
+      name: 'Third Party Liability', 
+      description: 'Mandatory coverage for damage to third parties as required by law',
+      price: 2850, 
+      isRequired: true, 
+      isSelected: true,
+      icon: <FaShieldAlt />,
+      color: '#4299e1'
+    },
+    { 
+      id: 'ownDamage', 
+      name: 'Own Damage Cover', 
+      description: 'Covers damage to your own vehicle due to accidents',
+      price: 3540, 
+      isRequired: false, 
+      isSelected: true,
+      icon: <FaCar />,
+      color: '#48bb78'
+    },
+    { 
+      id: 'fireCover', 
+      name: 'Fire Protection', 
+      description: 'Coverage for damage caused by fire or explosion',
+      price: 890, 
+      isRequired: false, 
+      isSelected: false,
+      icon: <FaFire />,
+      color: '#ed8936'
+    },
+    { 
+      id: 'floodCover', 
+      name: 'Flood & Natural Disaster', 
+      description: 'Protection from damage due to floods, earthquakes, and other natural disasters',
+      price: 1250, 
+      isRequired: false, 
+      isSelected: false,
+      icon: <FaTint />,
+      color: '#38b2ac'
+    },
+    { 
+      id: 'theftCover', 
+      name: 'Theft Protection', 
+      description: 'Coverage in case your vehicle is stolen',
+      price: 1480, 
+      isRequired: false, 
+      isSelected: false,
+      icon: <FaUserSecret />,
+      color: '#9f7aea'
+    },
+    { 
+      id: 'consumables', 
+      name: 'Consumables Cover', 
+      description: 'Coverage for oils, lubricants, and other consumables needed during repairs',
+      price: 680, 
+      isRequired: false, 
+      isSelected: false,
+      icon: <FaTools />,
+      color: '#667eea'
+    },
+    { 
+      id: 'emiProtection', 
+      name: 'EMI Protection', 
+      description: 'Coverage for your vehicle loan EMIs during repairs',
+      price: 920, 
+      isRequired: false, 
+      isSelected: false,
+      icon: <FaRegCreditCard />,
+      color: '#f56565'
+    },
+    { 
+      id: 'personalAccident', 
+      name: 'Personal Accident Cover', 
+      description: 'Compensation for injuries or disability to the driver',
+      price: 750, 
+      isRequired: false, 
+      isSelected: false,
+      icon: <FaUserShield />,
+      color: '#805ad5'
+    },
+    { 
+      id: 'passengerCover', 
+      name: 'Passenger Cover', 
+      description: 'Protection for passengers in your vehicle during accidents',
+      price: 650, 
+      isRequired: false, 
+      isSelected: false,
+      icon: <FaUsers />,
+      color: '#dd6b20'
+    },
+    { 
+      id: 'returnToInvoice', 
+      name: 'Return to Invoice', 
+      description: 'Get invoice value in case of total loss or theft',
+      price: 1100, 
+      isRequired: false, 
+      isSelected: false,
+      icon: <FaExchangeAlt />,
+      color: '#e53e3e'
+    },
+  ]);
   
-  // Base premium calculation
-  const [basePremium, setBasePremium] = useState(
-    localStorage.getItem("currentPremium") ? Number(localStorage.getItem("currentPremium")) : 3450
-  );
-
-  // Policy duration state
+  // Date and duration state
+  const [selectedDuration, setSelectedDuration] = useState('1 Year');
+  const [durationFactor, setDurationFactor] = useState(1.0);
+  const [idvValue, setIdvValue] = useState(50);
+  const [hoveredOption, setHoveredOption] = useState(null);
+  const [animation, setAnimation] = useState(false);
+  
+  // Custom date selection
   const today = new Date();
-  const nextYear = new Date(today);
-  nextYear.setFullYear(today.getFullYear() + 1);
-  
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
-  
+
   const [startDate, setStartDate] = useState(formatDate(today));
-  const [endDate, setEndDate] = useState(formatDate(nextYear));
-  const [selectedDuration, setSelectedDuration] = useState("1 Year");
-  const [durationFactor, setDurationFactor] = useState(1.0);
+  const [endDate, setEndDate] = useState(() => {
+    const nextYear = new Date(today);
+    nextYear.setFullYear(today.getFullYear() + 1);
+    return formatDate(nextYear);
+  });
+  const [customDates, setCustomDates] = useState(false);
   
-  // Duration options
-  const durationOptions = [
-    { label: "1 Week", value: "1 Week", factor: 0.1 },
-    { label: "2 Weeks", value: "2 Weeks", factor: 0.15 },
-    { label: "1 Month", value: "1 Month", factor: 0.2 },
-    { label: "3 Months", value: "3 Months", factor: 0.4 },
-    { label: "6 Months", value: "6 Months", factor: 0.6 },
-    { label: "1 Year", value: "1 Year", factor: 1.0 },
-    { label: "2 Years", value: "2 Years", factor: 1.8 },
-    { label: "3 Years", value: "3 Years", factor: 2.5 },
-  ];
-
-  // Coverage options with their prices
-  const [coverageOptions, setCoverageOptions] = useState([
-    { id: 1, name: "Third-Party Liability", price: 1500, isRequired: true, isSelected: true, description: "Covers damages to third parties (mandatory by law)" },
-    { id: 2, name: "Own Damage", price: 2500, isRequired: false, isSelected: true, description: "Covers damages to your own vehicle due to accidents" },
-    { id: 3, name: "Zero Depreciation", price: 1200, isRequired: false, isSelected: false, description: "Get full claim without depreciation deduction" },
-    { id: 4, name: "Engine Protection", price: 800, isRequired: false, isSelected: false, description: "Covers damages to engine due to water ingression or leakage of lubricating oil" },
-    { id: 5, name: "Return to Invoice", price: 600, isRequired: false, isSelected: false, description: "Get invoice value of the car in case of total loss or theft" },
-    { id: 6, name: "Roadside Assistance", price: 300, isRequired: false, isSelected: false, description: "24/7 assistance for breakdowns, towing, and emergencies" },
-    { id: 7, name: "Personal Accident Cover", price: 400, isRequired: false, isSelected: false, description: "Covers injuries to the driver/owner of the vehicle" },
-    { id: 8, name: "Passenger Cover", price: 350, isRequired: false, isSelected: false, description: "Covers injuries to passengers in your vehicle" },
-    { id: 9, name: "NCB Protection", price: 500, isRequired: false, isSelected: false, description: "Protects your No Claim Bonus even after making a claim" },
-    { id: 10, name: "Consumables Cover", price: 250, isRequired: false, isSelected: false, description: "Covers cost of consumables like engine oil, coolant, etc." },
-  ]);
-
-  // Calculate total premium based on selected options and duration
+  // Calculate maximum possible premium
+  const maxPremium = coverageOptions.reduce((sum, option) => sum + option.price, 0) * durationFactor;
+  
+  // Calculate actual premium
   const calculateTotalPremium = () => {
-    const baseTotalPremium = coverageOptions
+    const basePremium = coverageOptions
       .filter(option => option.isSelected)
       .reduce((total, option) => total + option.price, 0);
     
-    return Math.round(baseTotalPremium * durationFactor);
+    // Apply IDV adjustment
+    const idvAdjustedPremium = Math.round(basePremium * (0.75 + (idvValue / 100) * 0.5));
+    
+    // Apply duration factor
+    const totalPremium = Math.round(idvAdjustedPremium * durationFactor);
+    
+    // Add taxes (GST 18%)
+    const premiumWithTax = totalPremium + Math.round(totalPremium * 0.18);
+    
+    return premiumWithTax;
   };
-
-  // Handle checkbox change for coverage options
+  
+  // Calculate base premium without taxes
+  const calculateBasePremium = () => {
+    const basePremium = coverageOptions
+      .filter(option => option.isSelected)
+      .reduce((total, option) => total + option.price, 0);
+    
+    // Apply IDV adjustment
+    const idvAdjustedPremium = Math.round(basePremium * (0.75 + (idvValue / 100) * 0.5));
+    
+    // Apply duration factor
+    return Math.round(idvAdjustedPremium * durationFactor);
+  };
+  
+  // Calculate taxes
+  const calculateTaxes = () => {
+    const basePremium = calculateBasePremium();
+    return Math.round(basePremium * 0.18);
+  };
+  
+  // Calculate savings
+  const calculateSavings = () => {
+    const maxPremiumWithTax = maxPremium + Math.round(maxPremium * 0.18);
+    return maxPremiumWithTax - calculateTotalPremium();
+  };
+  
+  // Toggle coverage selection
   const handleCoverageChange = (id) => {
-    setCoverageOptions(
-      coverageOptions.map(option => 
-        option.id === id && !option.isRequired 
+    setCoverageOptions(prev => 
+      prev.map(option => 
+        option.id === id 
           ? { ...option, isSelected: !option.isSelected } 
           : option
       )
     );
-  };
-
-  // Handle slider change for insured value
-  const handleSliderChange = (e) => {
-    const newValue = Number(e.target.value).toFixed(2);
-    setInsuredValue(newValue);
     
-    // Recalculate base premium based on new insured value
-    const newBasePremium = (newValue * 0.549322709 * 1000).toFixed(0);
-    setBasePremium(newBasePremium);
-    
-    // Update prices of coverage options based on new insured value
-    setCoverageOptions(
-      coverageOptions.map(option => {
-        const factor = option.id === 1 ? 0.2 : 
-                      option.id === 2 ? 0.4 : 
-                      option.id === 3 ? 0.19 : 
-                      option.id === 4 ? 0.13 : 
-                      option.id === 5 ? 0.1 : 
-                      option.id === 6 ? 0.05 : 
-                      option.id === 7 ? 0.06 : 
-                      option.id === 8 ? 0.06 : 
-                      option.id === 9 ? 0.08 : 0.04;
-        
-        return {
-          ...option,
-          price: Math.round(newBasePremium * factor)
-        };
-      })
-    );
+    setAnimation(true);
+    setTimeout(() => setAnimation(false), 500);
   };
   
-  // Handle duration selection
-  const handleDurationSelect = (duration) => {
-    setSelectedDuration(duration.value);
-    setDurationFactor(duration.factor);
+  // Toggle all coverages
+  const toggleAllCoverages = () => {
+    const allSelected = coverageOptions.every(option => option.isRequired || option.isSelected);
     
-    // Update end date based on duration
+    setCoverageOptions(prev => 
+      prev.map(option => 
+        option.isRequired 
+          ? option 
+          : { ...option, isSelected: !allSelected }
+      )
+    );
+    
+    setAnimation(true);
+    setTimeout(() => setAnimation(false), 500);
+  };
+  
+  // Handle duration change
+  const handleDurationChange = (duration) => {
+    setSelectedDuration(duration);
+    setCustomDates(false);
+    
+    // Calculate end date based on duration
     const newEndDate = new Date(startDate);
-    if (duration.value === "1 Week") {
-      newEndDate.setDate(newEndDate.getDate() + 7);
-    } else if (duration.value === "2 Weeks") {
-      newEndDate.setDate(newEndDate.getDate() + 14);
-    } else if (duration.value === "1 Month") {
-      newEndDate.setMonth(newEndDate.getMonth() + 1);
-    } else if (duration.value === "3 Months") {
-      newEndDate.setMonth(newEndDate.getMonth() + 3);
-    } else if (duration.value === "6 Months") {
-      newEndDate.setMonth(newEndDate.getMonth() + 6);
-    } else if (duration.value === "1 Year") {
-      newEndDate.setFullYear(newEndDate.getFullYear() + 1);
-    } else if (duration.value === "2 Years") {
-      newEndDate.setFullYear(newEndDate.getFullYear() + 2);
-    } else if (duration.value === "3 Years") {
-      newEndDate.setFullYear(newEndDate.getFullYear() + 3);
+    
+    switch (duration) {
+      case '1 Year':
+        setDurationFactor(1.0);
+        newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+        break;
+      case '2 Years':
+        setDurationFactor(1.8);
+        newEndDate.setFullYear(newEndDate.getFullYear() + 2);
+        break;
+      case '3 Years':
+        setDurationFactor(2.4);
+        newEndDate.setFullYear(newEndDate.getFullYear() + 3);
+        break;
+      case '6 Months':
+        setDurationFactor(0.6);
+        newEndDate.setMonth(newEndDate.getMonth() + 6);
+        break;
+      case '3 Months':
+        setDurationFactor(0.4);
+        newEndDate.setMonth(newEndDate.getMonth() + 3);
+        break;
+      default:
+        setDurationFactor(1.0);
+        newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+        break;
     }
     
     setEndDate(formatDate(newEndDate));
+    setAnimation(true);
+    setTimeout(() => setAnimation(false), 500);
   };
   
   // Handle start date change
@@ -387,331 +467,342 @@ export const CustomPolicyBuilder = () => {
     const newStartDate = e.target.value;
     setStartDate(newStartDate);
     
-    // Update end date based on selected duration
-    const selectedDurationOption = durationOptions.find(option => option.value === selectedDuration);
-    if (selectedDurationOption) {
-      const newEndDate = new Date(newStartDate);
-      if (selectedDuration === "1 Week") {
-        newEndDate.setDate(newEndDate.getDate() + 7);
-      } else if (selectedDuration === "2 Weeks") {
-        newEndDate.setDate(newEndDate.getDate() + 14);
-      } else if (selectedDuration === "1 Month") {
-        newEndDate.setMonth(newEndDate.getMonth() + 1);
-      } else if (selectedDuration === "3 Months") {
-        newEndDate.setMonth(newEndDate.getMonth() + 3);
-      } else if (selectedDuration === "6 Months") {
-        newEndDate.setMonth(newEndDate.getMonth() + 6);
-      } else if (selectedDuration === "1 Year") {
-        newEndDate.setFullYear(newEndDate.getFullYear() + 1);
-      } else if (selectedDuration === "2 Years") {
-        newEndDate.setFullYear(newEndDate.getFullYear() + 2);
-      } else if (selectedDuration === "3 Years") {
-        newEndDate.setFullYear(newEndDate.getFullYear() + 3);
-      }
-      
-      setEndDate(formatDate(newEndDate));
-    }
+    // Update duration factor and selection based on date difference
+    calculateDurationFromDates(newStartDate, endDate);
   };
   
   // Handle end date change
   const handleEndDateChange = (e) => {
-    setEndDate(e.target.value);
+    const newEndDate = e.target.value;
+    setEndDate(newEndDate);
     
-    // Calculate and set duration based on start and end dates
-    const start = new Date(startDate);
-    const end = new Date(e.target.value);
-    const diffTime = Math.abs(end - start);
+    // Update duration factor and selection based on date difference
+    calculateDurationFromDates(startDate, newEndDate);
+  };
+  
+  // Calculate duration factor from start and end dates
+  const calculateDurationFromDates = (start, end) => {
+    const startDateObj = new Date(start);
+    const endDateObj = new Date(end);
+    
+    // Calculate difference in days
+    const diffTime = Math.abs(endDateObj - startDateObj);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays <= 7) {
-      setSelectedDuration("1 Week");
-      setDurationFactor(0.1);
-    } else if (diffDays <= 14) {
-      setSelectedDuration("2 Weeks");
-      setDurationFactor(0.15);
-    } else if (diffDays <= 31) {
-      setSelectedDuration("1 Month");
-      setDurationFactor(0.2);
-    } else if (diffDays <= 92) {
-      setSelectedDuration("3 Months");
-      setDurationFactor(0.4);
-    } else if (diffDays <= 183) {
-      setSelectedDuration("6 Months");
-      setDurationFactor(0.6);
-    } else if (diffDays <= 366) {
-      setSelectedDuration("1 Year");
-      setDurationFactor(1.0);
-    } else if (diffDays <= 731) {
-      setSelectedDuration("2 Years");
-      setDurationFactor(1.8);
+    // Calculate duration factor based on days
+    let newDurationFactor = 0;
+    let newDurationLabel = 'Custom';
+    
+    if (diffDays <= 90) {
+      newDurationFactor = 0.4;
+      newDurationLabel = '3 Months';
+    } else if (diffDays <= 180) {
+      newDurationFactor = 0.6;
+      newDurationLabel = '6 Months';
+    } else if (diffDays <= 365) {
+      newDurationFactor = 1.0;
+      newDurationLabel = '1 Year';
+    } else if (diffDays <= 730) {
+      newDurationFactor = 1.8;
+      newDurationLabel = '2 Years';
+    } else if (diffDays <= 1095) {
+      newDurationFactor = 2.4;
+      newDurationLabel = '3 Years';
     } else {
-      setSelectedDuration("3 Years");
-      setDurationFactor(2.5);
+      // For dates beyond 3 years, use a proportional factor
+      newDurationFactor = (diffDays / 365) * 0.8;
+      newDurationLabel = 'Custom';
     }
+    
+    setDurationFactor(newDurationFactor);
+    setSelectedDuration(newDurationLabel);
+    setCustomDates(true);
+    
+    setAnimation(true);
+    setTimeout(() => setAnimation(false), 500);
   };
-
-  // Continue to next step
+  
+  // Toggle custom date selection
+  const toggleCustomDates = () => {
+    setCustomDates(!customDates);
+  };
+  
+  // Continue to next page
   const handleContinue = () => {
-    // Save selected options and premium to localStorage
-    localStorage.setItem("customPolicyOptions", JSON.stringify(
-      coverageOptions.filter(option => option.isSelected)
-    ));
-    localStorage.setItem("currentPremium", calculateTotalPremium());
-    localStorage.setItem("currentIDV", insuredValue);
-    localStorage.setItem("policyType", "Custom");
+    // Save selected plan details to localStorage
+    localStorage.setItem("selectedPlan", "Custom Plan");
+    localStorage.setItem("totalacko", calculateTotalPremium().toString());
+    localStorage.setItem("basePremium", calculateBasePremium().toString());
+    localStorage.setItem("taxes", calculateTaxes().toString());
+    
+    // Store selected covers for reference
+    const selectedCovers = coverageOptions
+      .filter(option => option.isSelected)
+      .reduce((obj, option) => {
+        obj[option.id] = true;
+        return obj;
+      }, {});
+      
+    localStorage.setItem("customCovers", JSON.stringify(selectedCovers));
+    localStorage.setItem("policyDuration", selectedDuration);
+    localStorage.setItem("idvPercentage", idvValue.toString());
     localStorage.setItem("policyStartDate", startDate);
     localStorage.setItem("policyEndDate", endDate);
-    localStorage.setItem("policyDuration", selectedDuration);
     
-    try {
-      // Send data to server
-      axios
-        .post(`https://acko.herokuapp.com/user`, {
-          selectedPlan: "Custom Policy",
-          mobile: carDetails.mobile,
-          premium: calculateTotalPremium(),
-          paCover: coverageOptions.find(o => o.name === "Personal Accident Cover" && o.isSelected) ? 
-                  coverageOptions.find(o => o.name === "Personal Accident Cover").price : 0,
-          ncbDiscountAmount: (+basePremium * 20) / 80,
-          customPolicy: coverageOptions.filter(option => option.isSelected).map(o => o.name),
-          policyStartDate: startDate,
-          policyEndDate: endDate,
-          policyDuration: selectedDuration
-        })
-        .then((res) => {
-          localStorage.setItem("ackoUserId", res.data._id);
-          history.push("/addtional-details");
-        })
-        .catch((error) => {
-          console.error("Error saving policy data:", error);
-          // Even if the API call fails, still navigate to the next page
-          history.push("/addtional-details");
-        });
-    } catch (error) {
-      console.error("Error in try-catch block:", error);
-      // If any error occurs, still navigate to the next page
-      history.push("/addtional-details");
-    }
+    // Navigate to additional details page
+    history.push("/addtional-details");
   };
-
+  
   return (
-    <div className="App">
-      <Header></Header>
-      <Container>
-        <InContleft>
-          <div
-            style={{
-              border: "1px solid #dcdee9",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                paddingTop: "13px",
-                paddingBottom: "13px",
-              }}
-            >
-              <div
-                style={{
-                  paddingLeft: "16px",
-                  paddingTop: "4px",
-                  paddingBottom: "4px",
-                }}
+    <div className={styles.mainContainer}>
+      <div className={styles.customPolicyHeader}>
+        <h1 className={styles.mainTitle}>Build Your Custom Policy</h1>
+        <p className={styles.mainSubtitle}>
+          Customize your car insurance to perfectly match your needs and budget
+        </p>
+      </div>
+      
+      <div className={styles.customPolicyContent}>
+        <div className={styles.leftPanel}>
+          <div className={styles.sectionCard}>
+            <div className={styles.sectionHeader}>
+              <h2>Coverage Options</h2>
+              <button 
+                className={styles.toggleButton}
+                onClick={toggleAllCoverages}
               >
-                <div style={{ display: "flex" }}>
-                  {carSvg}
-                  <span className={styles.vehicle}>
-                    {carDetails.liscencePlate} {carDetails.vehicleName}
-                  </span>
-                </div>
-              </div>
-              <div
-                style={{
-                  paddingLeft: "16px",
-                  paddingTop: "4px",
-                  paddingBottom: "4px",
-                }}
-              >
-                <div style={{ display: "flex", color: "#8A909F" }}>
-                  {calendarSvg}
-                  <span className={styles.vehicle}>
-                    NCB - {carDetails.NCB}%
-                  </span>
-                </div>
-              </div>
-              <div
-                style={{
-                  paddingLeft: "16px",
-                  paddingTop: "4px",
-                  paddingBottom: "4px",
-                }}
-              >
-                <div style={{ display: "flex", color: "#8A909F" }}>
-                  {calendarSvg}
-                  <span className={styles.vehicle}>
-                    Registration in {carDetails.registrationMonthYear}
-                  </span>
-                </div>
-              </div>
-              <div
-                style={{
-                  paddingLeft: "16px",
-                  paddingTop: "4px",
-                  paddingBottom: "4px",
-                }}
-              >
-                <div style={{ display: "flex", color: "#8A909F" }}>
-                  {mapSvg}
-                  <span className={styles.vehicle}>{carDetails.pincode}</span>
-                </div>
-              </div>
+                {coverageOptions.every(option => option.isRequired || option.isSelected) ? "Deselect All" : "Select All"}
+              </button>
             </div>
-            <div>
-              <div
-                style={{
-                  float: "right",
-                  paddingRight: "18px",
-                  paddingTop: "16px",
-                  paddingBottom: "4px",
-                  fontSize: "12px",
-                }}
-                className={styles.editLink}
-              >
-                <a href="" style={{ textDecoration: "none" }}>
-                  <span style={{ color: "#528ae2" }}>Edit</span>
-                </a>
-              </div>
-              <div>
-                <img
-                  style={{
-                    width: "135px",
-                    height: "60px",
-                    marginTop: "16px",
-                    float: "right",
-                  }}
-                  src={images.ecosport}
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-          
-          {/* IDV Slider */}
-          <div style={{ border: "1px solid #dcdee9", padding: "16px" }}>
-            <div style={{ fontWeight: "500", marginBottom: "8px" }}>
-              Insured Declared Value (IDV)
-            </div>
-            <div style={{ fontSize: "12px", color: "#505f79", marginBottom: "16px" }}>
-              Adjust the IDV to customize your premium. Higher IDV means higher coverage but also higher premium.
-            </div>
-            <CoverageSlider
-              type="range"
-              min={carDetails.carValue * 0.3}
-              max={carDetails.carValue}
-              step="0.01"
-              value={insuredValue}
-              onChange={handleSliderChange}
-            />
-            <CoverageAmount>
-              <span>₹{(carDetails.carValue * 0.3).toFixed(2)} Lakhs</span>
-              <span>₹{insuredValue} Lakhs</span>
-              <span>₹{carDetails.carValue.toFixed(2)} Lakhs</span>
-            </CoverageAmount>
-          </div>
-          
-          {/* Policy Duration Section */}
-          <DateContainer>
-            <DateTitle>Policy Duration</DateTitle>
-            <DateDescription>
-              Select how long you want your insurance coverage to last. Shorter durations cost less but need to be renewed more frequently.
-            </DateDescription>
             
-            <DurationOptions>
-              {durationOptions.map((option) => (
-                <DurationOption 
-                  key={option.value}
-                  selected={selectedDuration === option.value}
-                  onClick={() => handleDurationSelect(option)}
+            <div className={styles.coverageList}>
+              {coverageOptions.map((option) => (
+                <div 
+                  key={option.id}
+                  className={`${styles.coverageOption} ${option.isSelected ? styles.selected : ''} ${hoveredOption === option.id ? styles.hovered : ''}`}
+                  onClick={() => !option.isRequired && handleCoverageChange(option.id)}
+                  onMouseEnter={() => setHoveredOption(option.id)}
+                  onMouseLeave={() => setHoveredOption(null)}
                 >
-                  {option.label}
-                </DurationOption>
+                  <div className={styles.coverageInfo}>
+                    <div 
+                      className={styles.coverageIcon} 
+                      style={{backgroundColor: option.color}}
+                    >
+                      {option.icon}
+                    </div>
+                    
+                    <div className={styles.coverageDetails}>
+                      <div className={styles.coverageHeader}>
+                        <h3>{option.name}</h3>
+                        {option.isRequired && <span className={styles.requiredBadge}>Required</span>}
+                      </div>
+                      <p className={styles.coverageDescription}>{option.description}</p>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.coverageAction}>
+                    <span className={styles.coveragePrice}>₹{option.price}</span>
+                    <div className={`${styles.checkbox} ${option.isSelected ? styles.checked : ''}`}>
+                      {option.isSelected && <FaCheck className={styles.checkmark} />}
+                    </div>
+                  </div>
+                </div>
               ))}
-            </DurationOptions>
+            </div>
+          </div>
+          
+          <div className={styles.sectionCard}>
+            <h2>Customize IDV</h2>
+            <p className={styles.sectionSubtitle}>Insured Declared Value - affects your premium and claim amount</p>
             
-            <DateInputGroup>
-              <DateInputContainer>
-                <DateLabel>Start Date</DateLabel>
-                <DateInput 
-                  type="date" 
-                  value={startDate}
-                  min={formatDate(today)}
-                  onChange={handleStartDateChange}
-                />
-              </DateInputContainer>
-              
-              <DateInputContainer>
-                <DateLabel>End Date</DateLabel>
-                <DateInput 
-                  type="date" 
-                  value={endDate}
-                  min={startDate}
-                  onChange={handleEndDateChange}
-                />
-              </DateInputContainer>
-            </DateInputGroup>
-          </DateContainer>
-        </InContleft>
-        
-        <InContright>
-          <BuilderContainer>
-            <BuilderTitle>Build Your Custom Policy</BuilderTitle>
-            <BuilderDescription>
-              Select the coverage options you need to create a policy that perfectly fits your requirements.
-            </BuilderDescription>
-            
-            {coverageOptions.map((option) => (
-              <div key={option.id}>
-                <CoverageOption>
-                  <CoverageCheckbox
-                    type="checkbox"
-                    id={`coverage-${option.id}`}
-                    checked={option.isSelected}
-                    onChange={() => handleCoverageChange(option.id)}
-                    disabled={option.isRequired}
-                  />
-                  <CoverageLabel htmlFor={`coverage-${option.id}`}>
-                    {option.name} {option.isRequired && "(Required)"}
-                  </CoverageLabel>
-                  <CoveragePrice>₹{option.price}</CoveragePrice>
-                </CoverageOption>
-                <CoverageDescription>{option.description}</CoverageDescription>
+            <div className={styles.sliderContainer}>
+              <div className={styles.sliderLabels}>
+                <span>Lower Premium</span>
+                <span>Higher Coverage</span>
               </div>
-            ))}
+              
+              <input 
+                type="range" 
+                min="0" 
+                max="100" 
+                value={idvValue} 
+                onChange={(e) => setIdvValue(parseInt(e.target.value))} 
+                className={styles.slider}
+              />
+              
+              <div className={styles.sliderValues}>
+                <span>₹{Math.round(calculateBasePremium() * 0.75 / durationFactor)}</span>
+                <span>₹{Math.round(calculateBasePremium() * 1.25 / durationFactor)}</span>
+              </div>
+            </div>
             
-            <PriceAdjustment>
-              <span>Base Premium (Annual)</span>
-              <span>₹{coverageOptions
+            <div className={styles.idvIndicator}>
+              <div className={styles.idvIndicatorBar}>
+                <div 
+                  className={styles.idvIndicatorFill} 
+                  style={{width: `${idvValue}%`}}
+                ></div>
+              </div>
+              <div className={styles.idvValue}>Selected IDV: {idvValue}%</div>
+            </div>
+          </div>
+          
+          <div className={styles.sectionCard}>
+            <h2>Policy Duration</h2>
+            <p className={styles.sectionSubtitle}>Choose how long you want your coverage to last</p>
+            
+            <div className={styles.durationOptions}>
+              <button 
+                className={`${styles.durationButton} ${selectedDuration === '3 Months' && !customDates ? styles.selected : ''}`}
+                onClick={() => handleDurationChange('3 Months')}
+              >
+                3 Months
+              </button>
+              <button 
+                className={`${styles.durationButton} ${selectedDuration === '6 Months' && !customDates ? styles.selected : ''}`}
+                onClick={() => handleDurationChange('6 Months')}
+              >
+                6 Months
+              </button>
+              <button 
+                className={`${styles.durationButton} ${selectedDuration === '1 Year' && !customDates ? styles.selected : ''}`}
+                onClick={() => handleDurationChange('1 Year')}
+              >
+                1 Year
+              </button>
+              <button 
+                className={`${styles.durationButton} ${selectedDuration === '2 Years' && !customDates ? styles.selected : ''}`}
+                onClick={() => handleDurationChange('2 Years')}
+              >
+                2 Years <span className={styles.saveBadge}>Save 10%</span>
+              </button>
+              <button 
+                className={`${styles.durationButton} ${selectedDuration === '3 Years' && !customDates ? styles.selected : ''}`}
+                onClick={() => handleDurationChange('3 Years')}
+              >
+                3 Years <span className={styles.saveBadge}>Save 20%</span>
+              </button>
+              <button 
+                className={`${styles.durationButton} ${customDates ? styles.selected : ''}`}
+                onClick={toggleCustomDates}
+              >
+                Custom
+              </button>
+            </div>
+            
+            {customDates && (
+              <div className={styles.customDateSelection}>
+                <div className={styles.dateInputGroup}>
+                  <div className={styles.dateInputContainer}>
+                    <label className={styles.dateLabel}>Start Date</label>
+                    <input 
+                      type="date" 
+                      className={styles.dateInput}
+                      value={startDate} 
+                      min={formatDate(today)}
+                      onChange={handleStartDateChange}
+                    />
+                  </div>
+                  <div className={styles.dateInputContainer}>
+                    <label className={styles.dateLabel}>End Date</label>
+                    <input 
+                      type="date" 
+                      className={styles.dateInput}
+                      value={endDate}
+                      min={startDate}
+                      onChange={handleEndDateChange}
+                    />
+                  </div>
+                </div>
+                <p className={styles.durationNote}>
+                  Your policy will be valid for {selectedDuration !== 'Custom' ? selectedDuration : 'the selected duration'}.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        <div className={styles.rightPanel}>
+          <div className={`${styles.summaryCard} ${animation ? styles.animate : ''}`}>
+            <h2>Your Custom Policy Summary</h2>
+            
+            <div className={styles.savingsDisplay}>
+              <div className={styles.savingsLabel}>Your Savings</div>
+              <div className={styles.savingsAmount}>₹{calculateSavings()}</div>
+            </div>
+            
+            <div className={styles.selectedCoverages}>
+              <h3>Selected Coverages ({coverageOptions.filter(option => option.isSelected).length}/{coverageOptions.length})</h3>
+              
+              {coverageOptions
                 .filter(option => option.isSelected)
-                .reduce((total, option) => total + option.price, 0)}</span>
-            </PriceAdjustment>
+                .map(option => (
+                  <div className={styles.selectedCoverage} key={option.id}>
+                    <div className={styles.selectedInfo}>
+                      <span 
+                        className={styles.selectedIcon}
+                        style={{ color: option.color }}
+                      >
+                        {option.icon}
+                      </span>
+                      <span>{option.name}</span>
+                    </div>
+                    <div className={styles.selectedPrice}>₹{option.price}</div>
+                  </div>
+                ))
+              }
+            </div>
             
-            <PriceAdjustment>
-              <span>Duration Adjustment ({selectedDuration})</span>
-              <span>x{durationFactor.toFixed(1)}</span>
-            </PriceAdjustment>
+            <div className={styles.pricingDetails}>
+              <div className={styles.pricingRow}>
+                <span>Base Premium</span>
+                <span>₹{coverageOptions
+                  .filter(option => option.isSelected)
+                  .reduce((total, option) => total + option.price, 0)}
+                </span>
+              </div>
+              
+              <div className={styles.pricingRow}>
+                <span>Duration {customDates ? '(Custom)' : `(${selectedDuration})`}</span>
+                <span>x{durationFactor.toFixed(1)}</span>
+              </div>
+              
+              <div className={styles.pricingRow}>
+                <span>IDV Adjustment</span>
+                <span>{idvValue > 50 ? '+' : ''}{Math.round((idvValue - 50) * 0.5)}%</span>
+              </div>
+              
+              <div className={styles.pricingRow}>
+                <span>Premium Subtotal</span>
+                <span>₹{calculateBasePremium()}</span>
+              </div>
+              
+              <div className={styles.pricingRow}>
+                <span>GST (18%)</span>
+                <span>₹{calculateTaxes()}</span>
+              </div>
+            </div>
             
-            <TotalPremium>
+            <div className={styles.totalPremium}>
               <span>Total Premium</span>
-              <span>₹{calculateTotalPremium()}</span>
-            </TotalPremium>
+              <span className={styles.totalAmount}>₹{calculateTotalPremium()}</span>
+            </div>
             
-            <ContinueButton onClick={handleContinue}>
-              Continue
-            </ContinueButton>
-          </BuilderContainer>
-        </InContright>
-      </Container>
+            <button 
+              className={styles.continueButton}
+              onClick={handleContinue}
+            >
+              Continue with Custom Plan
+            </button>
+            
+            <div className={styles.policyNote}>
+              <p>Premium includes all applicable taxes. Your custom policy will be valid from {new Date(startDate).toLocaleDateString()} to {new Date(endDate).toLocaleDateString()}.</p>
+              <p>By continuing, you agree to the <a href="#terms">Terms and Conditions</a>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }; 

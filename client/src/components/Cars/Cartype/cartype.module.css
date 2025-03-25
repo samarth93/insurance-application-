@@ -1,44 +1,80 @@
 .cartypebody {
-  /* border: 1px solid black; */
-  min-width: 350px;
-  z-index: 12;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .cartypehead {
-  margin-bottom: 30px;
-  font-style: normal;
   font-weight: bold;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 28px;
+  color: #253858;
+  margin-bottom: 24px;
+}
+
+.cartypesection {
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .cartypeflex {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.typeIcon {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
 }
 
 .cartypeflex p {
-  margin-right: 120px;
-  font-style: normal;
-  font-weight: 500;
+  flex: 1;
   font-size: 16px;
-  line-height: 16px;
+  color: #253858;
+  margin: 0;
+}
 
-  color: #528ae3;
+.dropdownButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
 }
 
 .imagearrow {
-  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.cartypebody hr {
+  border: none;
+  height: 1px;
+  background-color: #E5E9F2;
+  margin: 0 0 8px 0;
+}
+
+.continueButtonContainer {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
 }
 
 .cartypebtn {
-  background: #522ed3;
+  background: #522ED3;
   border-radius: 4px;
-  padding: 8px 32px;
-  width: 176px;
-  height: 32px;
   border: none;
-  margin-top: 30px;
+  padding: 12px 64px;
+  width: 240px;
   cursor: pointer;
   color: white;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.cartypebtn:hover {
+  background: #4526B1;
 }

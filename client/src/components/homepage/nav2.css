@@ -5,10 +5,10 @@
   left: 0;
   width: 100%;
   height: calc(100vh - 70px);
-  background-color: #ffffff;
+  background-color: #1C1F25;
   z-index: 999;
   overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   animation: slideDown 0.3s ease-in-out;
 }
 
@@ -30,29 +30,29 @@
 }
 
 .mobile-nav-section {
-  margin-bottom: 2rem;
-  background-color: #ffffff;
+  margin-bottom: 1.5rem;
+  background-color: #242830;
   border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .mobile-nav-section h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #253858;
+  color: #ffffff;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #343840;
 }
 
 .mobile-nav-link {
   display: flex;
   align-items: center;
-  color: #505f79;
+  color: #e0e0e0;
   text-decoration: none;
   font-size: 16px;
-  padding: 0.8rem 0;
+  padding: 0.8rem 0.5rem;
   transition: all 0.3s ease;
   border-radius: 6px;
   margin-bottom: 0.5rem;
@@ -60,34 +60,23 @@
 }
 
 .mobile-nav-link:hover {
-  color: #5A68E7;
-  background-color: #f0f2ff;
-  padding-left: 0.5rem;
+  color: #00B8D9;
+  background-color: #343840;
 }
 
-.mobile-nav-item {
-  display: flex;
-  align-items: center;
-  color: #505f79;
-  font-size: 16px;
-  padding: 0.8rem 0;
-  margin: 0;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.mobile-nav-item:hover {
-  color: #5A68E7;
-  background-color: #f0f2ff;
-  padding-left: 0.5rem;
+.mobile-nav-divider {
+  height: 1px;
+  background-color: #343840;
+  margin: 1rem 0 0.5rem 0;
 }
 
 .mobile-logout-btn {
-  background-color: #ffffff;
-  color: #de350b;
-  border: 1px solid #de350b;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: rgba(222, 53, 11, 0.1);
+  color: #ff6b6b;
+  border: 1px solid rgba(222, 53, 11, 0.3);
   border-radius: 6px;
   padding: 10px 16px;
   font-size: 14px;
@@ -95,11 +84,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 0.5rem;
-  width: 100%;
+  text-align: left;
 }
 
 .mobile-logout-btn:hover {
-  background-color: #ffebe6;
+  background-color: rgba(222, 53, 11, 0.2);
 }
 
 .mobile-claim-btn {
@@ -133,4 +122,10 @@
   color: #6b778c;
   margin-bottom: 0.8rem;
   line-height: 1.5;
+}
+
+@media (min-width: 993px) {
+  .mobile-nav-container {
+    display: none;
+  }
 } 

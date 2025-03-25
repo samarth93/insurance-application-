@@ -1,61 +1,78 @@
-.yearbody{
-    /* border: 1px solid black; */
-    max-width: 800px;
+.yearbody {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.yearbody p{
-    font-style: normal;
-font-weight: bold;
-font-size: 20px;
-line-height: 28px;
-color: #000000;
+.yearTitle {
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 28px;
+  color: #253858;
+  margin-bottom: 20px;
 }
 
-.yearflexdiv{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
+.yearflexdiv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
 }
 
-.yearflexdiv > div{
-    background: #F4F7FE;
-border-radius: 4px;
-padding: 8px 32px;
-width: 112px;
-height: 32px;
-cursor: pointer;
-font-weight: 500;
-
-
+.yearOption {
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-.yearbtn{
-    padding: 8px 32px;
-    width: 176px;
-height: 32px;
-background: #522ED3;
-border-radius: 4px;
-border: none;
-margin-top: 40px;
-cursor: pointer;
-color: white;
-}
-
-.yearflexdiv button{
-    border: none;
-    width: 100px;
+.yearOption button {
   background: #F4F7FE;
+  color: #505F79;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 4px;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.yearOption button:hover {
+  background: #E6EDFD;
+  color: #253858;
+}
+
+.selectedYear {
+  background: #E6EDFD !important;
+  color: #253858 !important;
+  box-shadow: 0 0 0 1px #8C76DF;
+}
+
+.continueButtonContainer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.yearbtn {
+  background: #522ED3;
+  border-radius: 4px;
+  border: none;
+  padding: 12px 64px;
+  width: 240px;
   cursor: pointer;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
-.yearflexdiv >div :hover{
-color:#522ED3 ;
-
-
+.yearbtn:hover {
+  background: #4526B1;
 }
 
+.yearbtn:disabled {
+  background: #B3B9C8;
+  cursor: not-allowed;
+}
 
 @media only screen and (max-width: 800px){
     .yearbody{

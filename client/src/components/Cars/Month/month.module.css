@@ -60,3 +60,86 @@ color:#522ED3 ;
 min-width: 300px;
     }
 }
+
+.monthBody {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.monthTitle {
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 28px;
+  color: #253858;
+  margin-bottom: 20px;
+}
+
+.monthFlexDiv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.monthOption {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.monthOption button {
+  background: #F4F7FE;
+  color: #505F79;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 4px;
+  width: 100%;
+  min-width: 70px;
+  transition: all 0.2s ease;
+}
+
+.monthOption button:hover {
+  background: #E6EDFD;
+  color: #253858;
+}
+
+.selectedMonth {
+  background: #E6EDFD !important;
+  color: #253858 !important;
+  box-shadow: 0 0 0 1px #8C76DF;
+}
+
+.continueButtonContainer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.monthBtn {
+  background: #522ED3;
+  border-radius: 4px;
+  border: none;
+  padding: 12px 64px;
+  width: 240px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.monthBtn:hover {
+  background: #4526B1;
+}
+
+.monthBtn:disabled {
+  background: #B3B9C8;
+  cursor: not-allowed;
+}
+
+@media only screen and (max-width: 800px) {
+  .monthFlexDiv {
+    justify-content: center;
+  }
+}

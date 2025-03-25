@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AuthService from '../../services/auth.service';
 import PolicyService from '../../services/policy.service';
-import Header from '../Header/Header';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -11,17 +10,79 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isServerAvailable, setIsServerAvailable] = useState(true);
+  const [databaseStatus, setDatabaseStatus] = useState('unknown');
+  const [useMockData, setUseMockData] = useState(false);
+
+  // Check server availability with enhanced status info
+  const checkServerAvailability = async () => {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      
+      const response = await fetch('http://localhost:8081/health', { 
+        method: 'GET',
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setIsServerAvailable(true);
+        setDatabaseStatus(data.database || 'unknown');
+        return {
+          available: true,
+          database: data.database || 'unknown'
+        };
+      } else {
+        setIsServerAvailable(false);
+        setDatabaseStatus('disconnected');
+        return { available: false, database: 'disconnected' };
+      }
+    } catch (error) {
+      console.warn('Server health check failed:', error.message);
+      setIsServerAvailable(false);
+      setDatabaseStatus('disconnected');
+      return { available: false, database: 'disconnected' };
+    }
+  };
 
   useEffect(() => {
     sessionStorage.removeItem('policy_created');
     
     const fetchData = async () => {
+      setLoading(true);
+      setError('');
+      
+      // First check server status
+      const serverStatus = await checkServerAvailability();
+      
+      if (!serverStatus.available) {
+        console.log("Server unavailable, using mock data");
+        loadMockData();
+        setLoading(false);
+        return;
+      }
+      
+      if (serverStatus.database === 'disconnected') {
+        setError("Server is running but database is disconnected. Some features may be unavailable.");
+      }
+      
       try {
-        setLoading(true);
-        
-        // Get user profile
-        const userResponse = await AuthService.getProfile();
-        setUser(userResponse.data);
+        // Get user profile with better error handling
+        try {
+          const userResponse = await AuthService.getProfile();
+          if (userResponse && userResponse.data) {
+            setUser(userResponse.data);
+          } else {
+            console.warn("Invalid user data response:", userResponse);
+            // Don't set error yet, try to fetch policies anyway
+          }
+        } catch (userError) {
+          console.error("Error fetching user profile:", userError);
+          // Continue with policies fetch, don't set error yet
+        }
 
         // Get policies with better error handling
         try {
@@ -37,12 +98,32 @@ const Dashboard = () => {
         } catch (policyError) {
           console.error("Error fetching policies:", policyError);
           setPolicies([]);
+          // We'll show empty policies rather than an error
+        }
+
+        // Only set error if we failed to get both user and policies
+        if (!user && policies.length === 0) {
+          setError('Please check your connection and try again');
         }
 
         setLoading(false);
       } catch (error) {
         console.error("Dashboard error:", error);
-        setError('Failed to load dashboard data');
+        
+        // More specific error messages based on the error type
+        if (error.message && error.message.includes('Network Error')) {
+          setError('Network error. Please check your internet connection.');
+        } else if (error.response && error.response.status === 401) {
+          setError('Session expired. Please log in again.');
+          // Redirect to login after a short delay
+          setTimeout(() => {
+            AuthService.logout();
+            window.location.href = '/login';
+          }, 2000);
+        } else {
+          setError('Failed to load dashboard data. Please try refreshing.');
+        }
+        
         setLoading(false);
       }
     };
@@ -78,10 +159,80 @@ const Dashboard = () => {
     }
   };
 
+  if (!isServerAvailable) {
+    return (
+      <div className="dashboard-container">
+        <div className="dashboard-content">
+          <div className="dashboard-header">
+            <h1>My Dashboard</h1>
+            <div className="dashboard-actions">
+              <button onClick={() => setRefreshKey(prevKey => prevKey + 1)} className="dashboard-button secondary refresh-button">
+                Try Again
+              </button>
+              <Link to="/profile" className="dashboard-button secondary">
+                Edit Profile
+              </Link>
+              <Link to="/cars/useofcar" className="dashboard-button primary">
+                Buy New Policy
+              </Link>
+            </div>
+          </div>
+          
+          <div className="server-unavailable-message">
+            <div className="message-icon">🔌</div>
+            <h3>Server is currently unavailable</h3>
+            <p>We're having trouble connecting to our servers. This could be due to maintenance or temporary network issues.</p>
+            <p>You can try again or continue using other parts of the application that don't require server connection.</p>
+            <button onClick={() => setRefreshKey(prevKey => prevKey + 1)} className="dashboard-button secondary">
+              Retry Connection
+            </button>
+          </div>
+          
+          {user && (
+            <div className="user-info-card">
+              <div className="user-info-header">
+                <h2>Personal Information (Cached)</h2>
+                <Link to="/profile" className="edit-link">
+                  Edit
+                </Link>
+              </div>
+              <div className="user-info-content">
+                <div className="user-info-item">
+                  <span className="info-label">Name</span>
+                  <span className="info-value">{user.name}</span>
+                </div>
+                <div className="user-info-item">
+                  <span className="info-label">Email</span>
+                  <span className="info-value">{user.email}</span>
+                </div>
+                {user.mobile && (
+                  <div className="user-info-item">
+                    <span className="info-label">Mobile</span>
+                    <span className="info-value">{user.mobile}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          
+          <div className="policies-section">
+            <h2>My Policies</h2>
+            <div className="no-policies">
+              <p>We can't load your policies right now.</p>
+              <p className="policy-note">Please try again when the server is available.</p>
+              <Link to="/cars/useofcar" className="dashboard-button primary">
+                Buy a New Policy
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="dashboard-container">
-        <Header />
         <div className="dashboard-loading">
           <div className="loading-spinner"></div>
           <p>Loading your dashboard...</p>
@@ -92,15 +243,30 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <Header />
-      
       <div className="dashboard-content">
         <div className="dashboard-header">
           <h1>My Dashboard</h1>
           <div className="dashboard-actions">
-            <button onClick={refreshPolicies} className="dashboard-button secondary refresh-button">
-              Refresh Policies
+            <button onClick={() => setRefreshKey(prevKey => prevKey + 1)} className="dashboard-button secondary refresh-button">
+              Refresh
             </button>
+            {!isServerAvailable && (
+              <div className="server-status-indicator">
+                Server Offline
+                <span className="status-dot offline"></span>
+              </div>
+            )}
+            {isServerAvailable && databaseStatus === 'disconnected' && (
+              <div className="database-status-indicator">
+                Database Offline
+                <span className="status-dot warning"></span>
+              </div>
+            )}
+            {useMockData && (
+              <div className="mock-data-indicator">
+                Demo Mode
+              </div>
+            )}
             <Link to="/profile" className="dashboard-button secondary">
               Edit Profile
             </Link>
