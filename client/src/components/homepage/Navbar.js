@@ -61,7 +61,7 @@ const Navbar = () => {
                         <Link to="/">
                             <img 
                                 src="/default.png" 
-                                alt="ACKO Insurance" 
+                                alt="Insuretech Insurance" 
                                 className="logo-image"
                             />
                         </Link>

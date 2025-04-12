@@ -38,7 +38,7 @@ const Home = () => {
         </div>
         
         <div className="benefits">
-          <h2>Why Choose ACKO</h2>
+          <h2>Why Choose Insuretech</h2>
           <div className="benefitsList">
             <div className="benefitItem">
               <div className="benefitIcon">

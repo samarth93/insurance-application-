@@ -14,13 +14,34 @@ const Dashboard = () => {
   const [databaseStatus, setDatabaseStatus] = useState('unknown');
   const [useMockData, setUseMockData] = useState(false);
 
+  // Mock data function
+  const loadMockData = () => {
+    setUser({
+      name: 'Demo User',
+      email: 'demo@example.com',
+      mobile: '1234567890'
+    });
+    setPolicies([
+      {
+        id: '1',
+        policyNumber: 'POL-001',
+        type: 'Comprehensive',
+        status: 'active',
+        startDate: new Date().toISOString(),
+        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+        premium: 5000
+      }
+    ]);
+    setUseMockData(true);
+  };
+
   // Check server availability with enhanced status info
   const checkServerAvailability = async () => {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
       
-      const response = await fetch('http://localhost:8081/health', { 
+      const response = await fetch('http://localhost:8080/health', { 
         method: 'GET',
         signal: controller.signal
       });

@@ -1,134 +1,121 @@
-import React, { useState } from 'react'
-import style from "./cartype.module.css"
-import car from "./Personel car.svg"
-import petrol from "./petrol.svg"
-import gear from "./gear.svg"
-import downarrow from "./Down arrow.svg"
-import Petrolpopup from '../Petrolpopup/Petrolpopup'
-import Typecarpopup from '../Typecarpopup/Typecarpopup'
-import Gearpopup from '../Gearpopup/Gearpopup'
-import axios from "axios"
-import {Link} from "react-router-dom"
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import style from './cartype.module.css';
 
-function Cartype() {
+const CarType = () => {
+    const [selectedType, setSelectedType] = useState('Hatchback');
+    const [selectedModel, setSelectedModel] = useState('Swift');
+    const [selectedFuel, setSelectedFuel] = useState('Petrol');
+    const [alreadyClicked, setAlreadyClicked] = useState(null);
 
-    const [carr, setCar] = useState("Swift");
-
-    const [fuel, setFuel] = useState("Petrol");
-
-    const [gearr, setGear] = useState("Titanium AT")
-    
-    const [petrolpopup, setPetrolpopup] = useState(false);
-
-    const [carpopup, setCarpopup] = useState(false);
-
-    const [gearpopup,setGearpopup]=useState(false)
-
-    const handleContinue = async () => {
-        try {
-            const id = localStorage.getItem("ackoid");
-            if (!id) {
-                console.error("No car ID found in localStorage");
-                return;
+    useEffect(() => {
+        // Pre-select the Hatchback button
+        setTimeout(() => {
+            const typeButton = document.querySelector('button[name="Hatchback"]');
+            if (typeButton) {
+                typeButton.parentElement.style.border = "1px solid #8C76DF";
+                setAlreadyClicked(typeButton.parentElement);
             }
-            
-            const data = {
-                name: carr,
-                fuel: fuel,
-                gear: gearr,
-            };
-            
-            await axios.patch(`https://acko.herokuapp.com/cars/${id}`, data);
-            console.log("Car details updated successfully");
-        } catch (error) {
-            console.error("Error updating car details:", error);
+        }, 0);
+    }, []);
+
+    const handleTypeClick = (e) => {
+        e.preventDefault();
+        const name = e.target.name;
+        
+        // Reset border on previously selected button
+        if (alreadyClicked) {
+            alreadyClicked.style.border = "none";
+        }
+        
+        // Set border on currently selected button
+        e.target.parentElement.style.border = "1px solid #8C76DF";
+        setAlreadyClicked(e.target.parentElement);
+        setSelectedType(name);
+        setSelectedModel(''); // Reset model when type changes
+    };
+
+    const handleModelChange = (e) => {
+        setSelectedModel(e.target.value);
+    };
+
+    const handleFuelChange = (e) => {
+        setSelectedFuel(e.target.value);
+    };
+
+    const handleContinue = () => {
+        if (!selectedType || !selectedModel || !selectedFuel) {
+            alert("Please select all options");
+            return;
         }
     };
 
-    return (
-      <div className={style.cartypebody}>
-        <h2 className={style.cartypehead}>Which Car do you drive?</h2>
-        <div className={style.cartypesection}>
-          <div className={style.cartypeflex}>
-            <img src={car} alt="Car" className={style.typeIcon} />
-            <p>{carr}</p>
-            <button 
-              onClick={() => {
-                setCarpopup(!carpopup);
-                setPetrolpopup(false);
-                setGearpopup(false);
-              }}
-              className={style.dropdownButton}
-            >
-              <img className={style.imagearrow} src={downarrow} alt="Select" />
-            </button>
-          </div>
-          <hr />
-          <Typecarpopup
-            setCar={setCar}
-            carpopup={carpopup}
-            setCarpopup={setCarpopup}
-          />
-        </div>
-        
-        <div className={style.cartypesection}>
-          <div className={style.cartypeflex}>
-            <img src={petrol} alt="Fuel" className={style.typeIcon} />
-            <p>{fuel}</p>
-            <button
-              onClick={() => {
-                setPetrolpopup(!petrolpopup);
-                setCarpopup(false);
-                setGearpopup(false);
-              }}
-              className={style.dropdownButton}
-            >
-              <img className={style.imagearrow} src={downarrow} alt="Select" />
-            </button>
-          </div>
-          <hr />
-          <Petrolpopup
-            petrolpopup={petrolpopup}
-            setFuel={setFuel}
-            setPetrolpopup={setPetrolpopup}
-          />
-        </div>
-        
-        <div className={style.cartypesection}>
-          <div className={style.cartypeflex}>
-            <img src={gear} alt="Transmission" className={style.typeIcon} />
-            <p>{gearr}</p>
-            <button
-              onClick={() => {
-                setGearpopup(!gearpopup);
-                setPetrolpopup(false);
-                setCarpopup(false);
-              }}
-              className={style.dropdownButton}
-            >
-              <img className={style.imagearrow} src={downarrow} alt="Select" />
-            </button>
-          </div>
-          <hr />
-          <Gearpopup
-            gearpopup={gearpopup}
-            setGearpopup={setGearpopup}
-            setGear={setGear}
-          />
-        </div>
-        
-        <div className={style.continueButtonContainer}>
-          <Link to="/cars/cardetail">
-            <button
-              onClick={handleContinue}
-              className={style.cartypebtn}
-            >
-              Continue
-            </button>
-          </Link>
-        </div>
-      </div>
-    );
-}
+    const carTypes = ['Hatchback', 'Sedan', 'SUV', 'MUV'];
+    const carModels = {
+        'Hatchback': ['Swift', 'i20', 'Polo'],
+        'Sedan': ['City', 'Verna', 'Ciaz'],
+        'SUV': ['Creta', 'Seltos', 'Harrier'],
+        'MUV': ['Innova', 'Ertiga', 'Carens']
+    };
+    const fuelTypes = ['Petrol', 'Diesel', 'CNG', 'Electric'];
 
-export default Cartype
+    return (
+        <div className={style.carTypeBody}>
+            <h2 className={style.carTypeTitle}>What type of car do you have?</h2>
+            <div className={style.carTypeGrid}>
+                {carTypes.map((type) => (
+                    <div key={type} className={style.carTypeOption}>
+                        <button
+                            name={type}
+                            onClick={handleTypeClick}
+                            className={selectedType === type ? style.selectedType : ""}
+                        >
+                            {type}
+                        </button>
+                    </div>
+                ))}
+            </div>
+
+            <div className={style.selectContainer}>
+                <h2 className={style.carModelTitle}>Select your car model</h2>
+                <select 
+                    className={style.modelSelect}
+                    value={selectedModel}
+                    onChange={handleModelChange}
+                >
+                    <option value="">Select a model</option>
+                    {carModels[selectedType]?.map((model) => (
+                        <option key={model} value={model}>{model}</option>
+                    ))}
+                </select>
+            </div>
+
+            <div className={style.selectContainer}>
+                <h2 className={style.carModelTitle}>Select fuel type</h2>
+                <select 
+                    className={style.modelSelect}
+                    value={selectedFuel}
+                    onChange={handleFuelChange}
+                >
+                    {fuelTypes.map((fuel) => (
+                        <option key={fuel} value={fuel}>{fuel}</option>
+                    ))}
+                </select>
+            </div>
+
+            <div className={style.continueButtonContainer}>
+                <Link to="/cars/expiry">
+                    <button
+                        className={style.continueBtn}
+                        onClick={handleContinue}
+                        disabled={!selectedType || !selectedModel || !selectedFuel}
+                    >
+                        Continue
+                    </button>
+                </Link>
+            </div>
+        </div>
+    );
+};
+
+export default CarType;

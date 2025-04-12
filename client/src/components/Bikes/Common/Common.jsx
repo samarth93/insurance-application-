@@ -127,7 +127,7 @@ const Common = () => {
   
   return (
     <CommonContainer>
-      <Logo>ACKO</Logo>
+      <Logo>Insuretech</Logo>
       
       <StepsContainer>
         {steps.map((step, index) => {

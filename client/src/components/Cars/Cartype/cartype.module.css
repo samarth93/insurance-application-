@@ -1,80 +1,125 @@
-.cartypebody {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
+.carTypeBody {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.cartypehead {
-  font-weight: bold;
-  font-size: 24px;
-  line-height: 28px;
-  color: #253858;
-  margin-bottom: 24px;
+.carTypeTitle {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
 }
 
-.cartypesection {
-  margin-bottom: 20px;
-  position: relative;
+.carTypeGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
 }
 
-.cartypeflex {
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
+.carTypeOption {
+    text-align: center;
+    opacity: 1;
+    transition: all 0.3s ease;
 }
 
-.typeIcon {
-  width: 24px;
-  height: 24px;
-  margin-right: 12px;
+.carTypeOption button {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: block;
+    opacity: 1;
+    color: #333;
+    min-width: 120px;
 }
 
-.cartypeflex p {
-  flex: 1;
-  font-size: 16px;
-  color: #253858;
-  margin: 0;
+.carTypeOption button:hover {
+    border-color: #8C76DF;
+    background: #f8f7ff;
+    transform: translateY(-2px);
 }
 
-.dropdownButton {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
+.selectedType {
+    background: #8C76DF !important;
+    color: white !important;
+    border-color: #8C76DF !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(140, 118, 223, 0.2);
 }
 
-.imagearrow {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease;
+.selectContainer {
+    margin-bottom: 2rem;
+    padding: 0 1rem;
 }
 
-.cartypebody hr {
-  border: none;
-  height: 1px;
-  background-color: #E5E9F2;
-  margin: 0 0 8px 0;
+.carModelTitle {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.modelSelect {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.modelSelect:hover {
+    border-color: #8C76DF;
+}
+
+.modelSelect:focus {
+    outline: none;
+    border-color: #8C76DF;
+    box-shadow: 0 0 0 3px rgba(140, 118, 223, 0.2);
 }
 
 .continueButtonContainer {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
+    text-align: center;
+    margin-top: 2rem;
+    padding: 0 1rem;
 }
 
-.cartypebtn {
-  background: #522ED3;
-  border-radius: 4px;
-  border: none;
-  padding: 12px 64px;
-  width: 240px;
-  cursor: pointer;
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+.continueBtn {
+    background: #8C76DF;
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px;
 }
 
-.cartypebtn:hover {
-  background: #4526B1;
+.continueBtn:hover {
+    background: #7a66c9;
+    transform: translateY(-2px);
+}
+
+.continueBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
 }

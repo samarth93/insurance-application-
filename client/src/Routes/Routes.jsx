@@ -35,6 +35,8 @@ import RouteHealthAdditionalDetails from "../components/Health/AdditionalDetails
 import RouteHealthProfile from "../components/Health/Profile/RouteHealthProfile";
 import RouteHealthMedicalInfo from "../components/Health/MedicalInfo/RouteHealthMedicalInfo";
 import HealthCustomPlan from '../components/Health/CustomPlan/HealthCustomPlan';
+import VehicleDetails from '../components/VehicleDetails/VehicleDetails';
+import About from '../components/About/About';
 
 // Protected Route component
 const ProtectedRoute = ({ component: Component, ...rest }) => (
@@ -74,6 +76,7 @@ function Routes() {
     <Switch>
       {/* Public Routes */}
       <PublicRoute path="/" exact component={Home} />
+      <PublicRoute path="/about" exact component={About} />
 
       {/* Authentication Routes */}
       <PublicRoute path="/login" exact component={Login} />
@@ -81,6 +84,9 @@ function Routes() {
 
       {/* Protected Dashboard Routes */}
       <ProtectedRoute path="/dashboard" exact component={Dashboard} />
+
+      {/* Vehicle Details Route */}
+      <PublicRoute path="/vehicle-details" exact component={VehicleDetails} />
 
       {/* Car Routes */}
       <PublicRoute path="/cars/useofcar" exact component={Routeuseofcar} />

@@ -53,7 +53,7 @@ const Register = () => {
       <div className="auth-form-container">
         <div className="auth-form-box">
           <h2>Create an Account</h2>
-          <p className="auth-subtitle">Join ACKO Insurance to get started</p>
+          <p className="auth-subtitle">Join Insuretech Insurance to get started</p>
 
           {error && <div className="auth-error">{error}</div>}
 

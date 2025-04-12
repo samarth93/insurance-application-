@@ -1,0 +1,27 @@
+{
+  "name": "insurance-application-",
+  "version": "1.0.0",
+  "description": "INSURETECH",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "insurance-application-": "file:",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-scripts": "^5.0.1",
+    "styled-components": "^6.1.17"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "cssnano": "^7.0.6",
+    "postcss": "^8.5.3",
+    "postcss-cli": "^11.0.1"
+  }
+}

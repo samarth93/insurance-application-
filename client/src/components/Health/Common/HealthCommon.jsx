@@ -96,7 +96,7 @@ function HealthCommon() {
   return (
     <CommonContainer>
       <TopBanner>
-        <Logo>ACKO Health Insurance</Logo>
+        <Logo>Insuretech Health Insurance</Logo>
         <Tagline>Comprehensive coverage for your wellbeing</Tagline>
       </TopBanner>
       <InfoSection>
