@@ -1,4 +1,4 @@
-# ACKO Insurance Application
+# INSURETECH Insurance Application
 
 This is a full-stack insurance application with a React frontend and Node.js backend.
 
