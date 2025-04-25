@@ -1,0 +1,158 @@
+.repair-shop-card {
+  display: flex;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.repair-shop-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.shop-image {
+  position: relative;
+  width: 250px;
+  height: 220px;
+  flex-shrink: 0;
+}
+
+.shop-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.in-network-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.shop-details {
+  padding: 20px;
+  flex: 1;
+}
+
+.shop-details h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.rating, .address, .contact, .hours {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.icon, .star-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.star-icon {
+  color: #FFC107;
+}
+
+.open {
+  color: #4CAF50;
+}
+
+.closed {
+  color: #F44336;
+}
+
+.services, .specialties {
+  margin-top: 15px;
+}
+
+.services h4, .specialties h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.service-tags, .specialty-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.service-tag {
+  background-color: #f0f0f0;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+.specialty-tag {
+  background-color: #E3F2FD;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #1976D2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.directions-btn, .book-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.directions-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.directions-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.book-btn {
+  background-color: #1976D2;
+  color: white;
+}
+
+.book-btn:hover {
+  background-color: #1565C0;
+}
+
+@media (max-width: 768px) {
+  .repair-shop-card {
+    flex-direction: column;
+  }
+  
+  .shop-image {
+    width: 100%;
+    height: 180px;
+  }
+} 
+ 

@@ -1,0 +1,18 @@
+import React from 'react';import { Route, Switch } from 'react-router-dom';
+import CarClaimForm from './Car/New/CarClaimForm';
+import CarHowItWorks from './Car/HowItWorks/CarHowItWorks';
+import CarGarages from './Car/Garages/CarGarages';
+import BikeRepairShops from './Bike/RepairShops/BikeRepairShops';
+import BikeClaimForm from './Bike/New/BikeClaimForm';
+import BikeHowItWorks from './Bike/HowItWorks/BikeHowItWorks';
+// Import other claim components as they are created
+
+
+const ClaimsRoutes = () => {
+  return (
+    <Switch>
+      {/* Car Insurance Claims Routes */}
+      <Route path="/claims/car/new" component={CarClaimForm} />
+      <Route path="/claims/car/how-it-works" component={CarHowItWorks} />
+      <Route path="/claims/car/garages" component={CarGarages} />
+

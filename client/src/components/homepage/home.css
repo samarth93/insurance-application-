@@ -97,4 +97,152 @@
     transform: scale(1.1);
     color: #ffffff;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* Vehicle Search Box - Improved Design */
+.custom-search {
+  display: flex;
+  margin: 20px auto;
+  max-width: 600px;
+  width: 90%;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 2px solid #fff;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-search:hover, 
+.custom-search:focus-within {
+  border-color: #fff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.custom-search-input {
+  flex: 1;
+  padding: 16px 25px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  color: #555;
+  background: white;
+}
+
+.custom-search-input::placeholder {
+  color: #aaa;
+}
+
+.custom-search-botton {
+  background: #8C76DF;
+  color: white;
+  border: none;
+  padding: 16px 30px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+  height: 100%;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+}
+
+.custom-search-botton:hover {
+  background: #7459d4;
+}
+
+.car_insure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Make the arrow icon look right */
+.car_insure i {
+  font-size: 16px;
+  margin-left: 4px;
+}
+
+/* Hide the secondary arrow */
+.hidd_arr {
+  display: none;
+}
+
+/* Remove all extra animations and effects */
+
+/* Vehicle Registration Input - New Creative Design */
+.vehicle-reg-card {
+  background: white;
+  max-width: 500px;
+  width: 85%;
+  margin: 25px auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  border-top: 4px solid #8C76DF;
+}
+
+.vehicle-reg-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  position: relative;
+  padding-left: 10px;
+}
+
+.vehicle-reg-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 18px;
+  width: 4px;
+  background: #8C76DF;
+  border-radius: 2px;
+}
+
+.vehicle-reg-input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: #777;
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.vehicle-reg-input:focus {
+  outline: none;
+  border-color: #8C76DF;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(140, 118, 223, 0.1);
+}
+
+.vehicle-reg-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #8C76DF 0%, #6029cc 100%);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.vehicle-reg-button:hover {
+  background: linear-gradient(135deg, #7c66cf 0%, #5020b8 100%);
+  box-shadow: 0 4px 10px rgba(96, 41, 204, 0.2);
+  transform: translateY(-1px);
 } 

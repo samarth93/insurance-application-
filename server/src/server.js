@@ -6,9 +6,21 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// More detailed CORS setup
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
 app.use(express.json());
+
+// Log all requests for debugging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} | ${req.method} ${req.url}`);
+  next();
+});
 
 // Controllers
 const carController = require("./controllers/car.controller");
@@ -42,10 +54,10 @@ app.get("/", (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Server Error:', err);
   res.status(500).json({
     status: 'error',
-    message: 'Something went wrong!'
+    message: err.message || 'Something went wrong!'
   });
 });
 
@@ -69,7 +81,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 // Start server
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8081;
 
 // Use a flag to prevent multiple connection attempts during restart
 let isConnecting = false;
@@ -88,7 +100,7 @@ const server = app.listen(port, async () => {
       isConnecting = false;
     }
   }
-  console.log(`Server connected to port: ${port}`);
+  console.log(`Server running on port: ${port}`);
 });
 
 server.on('error', (err) => {

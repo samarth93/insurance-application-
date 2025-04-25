@@ -2,16 +2,33 @@
 echo Starting ACKO Insurance Application...
 echo.
 
-echo Starting server...
-start cmd /k "cd server && npm start"
+echo Installing server dependencies...
+cd server && npm install
+if %ERRORLEVEL% NEQ 0 (
+  echo Error installing server dependencies!
+  pause
+  exit /b 1
+)
+
+echo Installing client dependencies...
+cd ..\client && npm install
+if %ERRORLEVEL% NEQ 0 (
+  echo Error installing client dependencies!
+  pause
+  exit /b 1
+)
 
 echo.
-echo Waiting for server to initialize (5 seconds)...
-timeout /t 5 /nobreak > nul
+echo Starting server...
+cd ..\server && start cmd /k "npm start"
+
+echo.
+echo Waiting for server to initialize (8 seconds)...
+timeout /t 8 /nobreak > nul
 
 echo.
 echo Starting client...
-start cmd /k "cd client && npm start"
+cd ..\client && start cmd /k "npm start"
 
 echo.
 echo Both applications are starting. Please wait for the browser to open.

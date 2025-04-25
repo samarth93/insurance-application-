@@ -1,0 +1,874 @@
+/* Car Claim Form Styles */
+.car-claim-form-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.claim-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1rem;
+}
+
+.claim-form-header h1 {
+  font-size: 1.75rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-actions-top {
+  display: flex;
+  gap: 1rem;
+}
+
+.save-draft-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f0f0f0;
+  color: #555;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-draft-btn:hover {
+  background-color: #e5e5e5;
+}
+
+/* Progress Indicator */
+.progress-indicator {
+  margin-bottom: 2rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #8a2be2;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.steps-display {
+  text-align: right;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Form Styles */
+.claim-form-content {
+  margin-bottom: 2rem;
+}
+
+.form-step {
+  animation: fadeIn 0.3s ease;
+}
+
+.form-step h2 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step-icon {
+  color: #8a2be2;
+}
+
+.form-section {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #444;
+  position: relative;
+}
+
+.character-counter {
+  position: absolute;
+  right: 0;
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: normal;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #8a2be2;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.1);
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8a2be2;
+}
+
+.input-with-icon input {
+  padding-left: 2.5rem;
+}
+
+.input-with-action {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input-with-action input {
+  flex: 1;
+}
+
+.retrieve-btn {
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retrieve-btn:hover {
+  background-color: #7823db;
+}
+
+.map-placeholder {
+  margin-top: 1rem;
+  background-color: #f0f0f0;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+}
+
+.map-placeholder.advanced {
+  height: 200px;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.feature-list {
+  display: inline-block;
+  text-align: left;
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
+
+.feature-list li {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Radio Button Styles */
+.radio-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="radio"]:checked {
+  border-color: #8a2be2;
+}
+
+input[type="radio"]:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: #8a2be2;
+  border-radius: 50%;
+}
+
+input[type="radio"]:focus {
+  box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.1);
+}
+
+/* Incident Map Interface */
+.incident-map-interface {
+  margin-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1.5rem;
+}
+
+.incident-map-interface h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #444;
+}
+
+.map-controls {
+  margin-top: 1rem;
+}
+
+/* Form Navigation */
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.prev-btn,
+.next-btn {
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prev-btn {
+  background-color: #f0f0f0;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.next-btn {
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  margin-left: auto;
+}
+
+.prev-btn:hover {
+  background-color: #e5e5e5;
+}
+
+.next-btn:hover {
+  background-color: #7823db;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .car-claim-form-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .claim-form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .form-actions-top {
+    width: 100%;
+  }
+}
+
+/* Car Damage Selector Styles */
+.car-damage-selector {
+  margin-bottom: 2rem;
+}
+
+.car-damage-selector h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.helper-text {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.car-diagram-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.car-diagram {
+  flex: 1;
+  min-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.car-outline {
+  width: 100%;
+  min-height: 250px;
+  position: relative;
+  background-color: #f6f6f6;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.car-regions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0.5rem;
+  width: 90%;
+  height: 90%;
+}
+
+.car-region {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.car-region:hover {
+  background-color: rgba(138, 43, 226, 0.1);
+  border-color: #8a2be2;
+}
+
+.car-region.selected {
+  background-color: rgba(138, 43, 226, 0.2);
+  border-color: #8a2be2;
+  font-weight: 600;
+}
+
+.selected-regions {
+  flex: 1;
+  min-width: 200px;
+}
+
+.selected-regions h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.selected-regions-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.selected-regions-list li {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: rgba(138, 43, 226, 0.1);
+  border-left: 3px solid #8a2be2;
+  border-radius: 0 4px 4px 0;
+  text-transform: capitalize;
+}
+
+.no-regions {
+  color: #888;
+  font-style: italic;
+}
+
+/* Damage Severity Scale */
+.severity-scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.severity-option {
+  flex: 1;
+  min-width: 150px;
+}
+
+.severity-option input[type="radio"] {
+  display: none;
+}
+
+.severity-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+.severity-option input[type="radio"]:checked + .severity-label {
+  border-color: #8a2be2;
+  background-color: rgba(138, 43, 226, 0.05);
+  box-shadow: 0 2px 8px rgba(138, 43, 226, 0.1);
+}
+
+.severity-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+.severity-icon.minor {
+  background-color: #ffd166;
+}
+
+.severity-icon.moderate {
+  background-color: #f8961e;
+}
+
+.severity-icon.severe {
+  background-color: #e63946;
+}
+
+.severity-label span {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.severity-label small {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+}
+
+/* Photo Upload Area */
+.photo-upload-area {
+  margin-top: 1rem;
+}
+
+.upload-instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  border: 2px dashed #ddd;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+.upload-icon {
+  font-size: 2.5rem;
+  color: #8a2be2;
+  margin-bottom: 1rem;
+}
+
+.upload-instructions h4 {
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.upload-instructions p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.upload-btn {
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.upload-btn:hover {
+  background-color: #7823db;
+}
+
+.file-input {
+  display: none;
+}
+
+.uploaded-photos {
+  margin-top: 1.5rem;
+}
+
+.uploaded-photos h4 {
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.photo-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.photo-preview {
+  height: 100px;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo-name {
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.remove-photo {
+  width: 100%;
+  background-color: #f0f0f0;
+  border: none;
+  border-top: 1px solid #ddd;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.remove-photo:hover {
+  background-color: #ffebee;
+  color: #e53935;
+}
+
+/* Voice Note */
+.voice-note-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.voice-note-btn:hover {
+  background-color: #7823db;
+}
+
+.voice-note-preview {
+  margin-top: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.voice-note-waveform {
+  height: 80px;
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #ddd;
+}
+
+.voice-note-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.voice-note-play,
+.voice-note-delete {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.voice-note-play {
+  background-color: #8a2be2;
+  color: white;
+}
+
+.voice-note-delete {
+  background-color: #f0f0f0;
+  color: #e53935;
+}
+
+/* Garage Selector */
+.garage-selector {
+  margin-top: 0.5rem;
+}
+
+.garage-map-container {
+  margin-bottom: 1rem;
+}
+
+/* Contact Method Options */
+.contact-method-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.contact-method-option {
+  flex: 1;
+  min-width: 120px;
+  position: relative;
+  cursor: pointer;
+}
+
+.contact-method-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.contact-method-content {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+.contact-method-option input[type="radio"]:checked + .contact-method-content {
+  border-color: #8a2be2;
+  background-color: rgba(138, 43, 226, 0.05);
+  box-shadow: 0 2px 8px rgba(138, 43, 226, 0.1);
+}
+
+.contact-method-content span {
+  font-weight: 500;
+}
+
+/* Info Message */
+.info-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.8rem;
+  border-radius: 4px;
+  background-color: #e8f4fd;
+  color: #0277bd;
+  font-size: 0.9rem;
+}
+
+/* Review & Submit */
+.review-summary {
+  margin-bottom: 2rem;
+}
+
+.review-summary h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #444;
+  text-align: center;
+}
+
+.review-section {
+  margin-bottom: 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.review-section h4 {
+  background-color: #f5f5f5;
+  padding: 0.8rem 1rem;
+  margin: 0;
+  color: #333;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.review-details {
+  padding: 1rem;
+}
+
+.review-item {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.review-item:last-child {
+  margin-bottom: 0;
+}
+
+.review-label {
+  font-weight: 500;
+  min-width: 150px;
+  color: #555;
+}
+
+.review-value {
+  flex: 1;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.review-item.review-text {
+  flex-direction: column;
+}
+
+.review-item.review-text .review-label {
+  margin-bottom: 0.5rem;
+}
+
+.review-item.review-text .review-value {
+  padding: 0.8rem;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  font-style: italic;
+}
+
+/* Terms and Declaration */
+.terms-declaration {
+  margin-top: 2rem;
+}
+
+.checkbox-label {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+.checkbox-label span {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+} 
+ 

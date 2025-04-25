@@ -1,0 +1,215 @@
+.health-track-plan {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.search-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.search-section h2 {
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.input-group {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.search-form input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-form button {
+  padding: 0.75rem 1.5rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-form button:hover {
+  background-color: #45a049;
+}
+
+.search-form button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Claim Details Styles */
+.claim-details {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.status-badge.in-progress {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Timeline Styles */
+.status-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.timeline-icon {
+  font-size: 1.5rem;
+  color: #4CAF50;
+}
+
+.timeline-content h4 {
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-content p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Documents Section Styles */
+.documents-section h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.documents-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.document-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.document-name {
+  color: #333;
+  font-weight: 500;
+}
+
+.document-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-icon {
+  font-size: 1.2rem;
+}
+
+.status-icon.received {
+  color: #28a745;
+}
+
+.status-icon.pending {
+  color: #ffc107;
+  animation: spin 1s linear infinite;
+}
+
+.status-icon.rejected {
+  color: #dc3545;
+}
+
+.status-text {
+  font-size: 0.9rem;
+}
+
+.status-text.received {
+  color: #28a745;
+}
+
+.status-text.pending {
+  color: #ffc107;
+}
+
+.status-text.rejected {
+  color: #dc3545;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .health-track-plan {
+    padding: 1rem;
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+
+  .status-timeline {
+    grid-template-columns: 1fr;
+  }
+} 

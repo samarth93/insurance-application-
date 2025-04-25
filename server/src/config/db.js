@@ -20,14 +20,21 @@ const connect = async () => {
     try {
         mongoose.set('strictQuery', false);
         
-        // For now, we'll just return true without attempting to connect
-        console.log("Running in offline mode - database connection skipped");
+        const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/insurance";
+        
+        // Try to connect to the database
+        await mongoose.connect(uri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        
+        console.log("Database connected successfully");
         connectionEstablished = true;
         isConnecting = false;
         return true;
         
     } catch (error) {
-        console.error("Error in database setup:", error.message);
+        console.error("Error in database connection:", error.message);
         console.log("Application will continue without database connection");
         isConnecting = false;
         return true; // Return true to allow the app to continue

@@ -37,6 +37,7 @@ import RouteHealthMedicalInfo from "../components/Health/MedicalInfo/RouteHealth
 import HealthCustomPlan from '../components/Health/CustomPlan/HealthCustomPlan';
 import VehicleDetails from '../components/VehicleDetails/VehicleDetails';
 import About from '../components/About/About';
+import ClaimsRoutes from '../components/Claims/ClaimsRoutes';
 
 // Protected Route component
 const ProtectedRoute = ({ component: Component, ...rest }) => (
@@ -124,6 +125,9 @@ function Routes() {
       <PublicRoute path="/health/plans" exact component={RouteHealthPlans} />
       <PublicRoute path="/health/additional-details" exact component={RouteHealthAdditionalDetails} />
       <PublicRoute path="/health/custom-plan" exact component={HealthCustomPlan} />
+      
+      {/* Claims Routes */}
+      <Route path="/claims" component={ClaimsRoutes} />
       
       {/* 404 Route */}
       <PublicRoute path="*" component={() => <h1>404: Page not found</h1>} />

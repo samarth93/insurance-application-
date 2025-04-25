@@ -4,7 +4,9 @@ import axios from 'axios';
 // const API_URL = 'https://acko.herokuapp.com';
 
 // For local development
-const API_URL = 'http://localhost:8081';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8081';
+
+console.log('Using API URL:', API_URL); // Add this line for debugging
 
 // Create axios instance with timeout
 const api = axios.create({
@@ -12,7 +14,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  timeout: 10000 // 10 second timeout
+  timeout: 15000 // 15 second timeout for slower connections
 });
 
 // Add token to requests if available

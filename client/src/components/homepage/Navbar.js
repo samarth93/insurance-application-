@@ -1,7 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Hamburger from 'hamburger-react';
-import { FaUser, FaChevronDown, FaTachometerAlt, FaUserEdit, FaSignOutAlt } from 'react-icons/fa';
+import { 
+    FaUser, 
+    FaChevronDown, 
+    FaTachometerAlt, 
+    FaUserEdit, 
+    FaSignOutAlt, 
+    FaMoneyBillWave,
+    FaCar,
+    FaMotorcycle,
+    FaHeartbeat,
+    FaAmbulance,
+    FaTools,
+    FaWrench,
+    FaMapMarkerAlt,
+    FaPhoneAlt
+} from 'react-icons/fa';
 import Nav2 from "./Nav2";
 import AuthService from "../../services/auth.service";
 import "./navbar.css";
@@ -11,7 +26,10 @@ const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
     const [showAccountMenu, setShowAccountMenu] = useState(false);
+    const [showClaimsMenu, setShowClaimsMenu] = useState(false);
+    const [activeInsuranceType, setActiveInsuranceType] = useState(null);
     const accountMenuRef = useRef(null);
+    const claimsMenuRef = useRef(null);
     const history = useHistory();
 
     useEffect(() => {
@@ -37,13 +55,28 @@ const Navbar = () => {
     const toggleAccountMenu = (e) => {
         e.preventDefault();
         setShowAccountMenu(!showAccountMenu);
+        setShowClaimsMenu(false); // Close claims menu if open
     };
 
-    // Close menu when clicking outside
+    const toggleClaimsMenu = (e) => {
+        e.preventDefault();
+        setShowClaimsMenu(!showClaimsMenu);
+        setShowAccountMenu(false); // Close account menu if open
+    };
+
+    // Handle insurance type hover in claims dropdown
+    const handleInsuranceTypeHover = (type) => {
+        setActiveInsuranceType(type);
+    };
+
+    // Close menus when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
                 setShowAccountMenu(false);
+            }
+            if (claimsMenuRef.current && !claimsMenuRef.current.contains(event.target)) {
+                setShowClaimsMenu(false);
             }
         };
 
@@ -71,10 +104,109 @@ const Navbar = () => {
                         <Link to="/cars/useofcar" className="navbar-link">Car Insurance</Link>
                         <Link to="/bikes/pincode" className="navbar-link">Bike Insurance</Link>
                         <Link to="/health/profile" className="navbar-link">Health Insurance</Link>
+                        <div className="navbar-link claims-link" onClick={toggleClaimsMenu}>
+                            Claims <FaChevronDown className="dropdown-icon" />
+                        </div>
                         <Link to="/about" className="navbar-link">About Us</Link>
                     </div>
                     
-                    <div className="navbar-actions">
+                    {/* Claims Dropdown Menu */}
+                    {showClaimsMenu && (
+                        <div className="claims-dropdown-container" ref={claimsMenuRef}>
+                            <div className="claims-dropdown">
+                                <div className="claims-header">
+                                    <FaMoneyBillWave className="claims-icon" />
+                                    <h2>Claims</h2>
+                                </div>
+                                
+                                <div className="claims-content">
+                                    <div className="insurance-types">
+                                        <div 
+                                            className={`insurance-type ${activeInsuranceType === 'car' ? 'active' : ''}`}
+                                            onMouseEnter={() => handleInsuranceTypeHover('car')}
+                                        >
+                                            <FaCar className="insurance-type-icon" />
+                                            <span className="insurance-full-name">Car Insurance</span>
+                                        </div>
+                                        
+                                        <div 
+                                            className={`insurance-type ${activeInsuranceType === 'bike' ? 'active' : ''}`}
+                                            onMouseEnter={() => handleInsuranceTypeHover('bike')}
+                                        >
+                                            <FaMotorcycle className="insurance-type-icon" />
+                                            <span className="insurance-full-name">Bike Insurance</span>
+                                        </div>
+                                        
+                                        <div 
+                                            className={`insurance-type ${activeInsuranceType === 'health' ? 'active' : ''}`}
+                                            onMouseEnter={() => handleInsuranceTypeHover('health')}
+                                        >
+                                            <FaHeartbeat className="insurance-type-icon" />
+                                            <span className="insurance-full-name">Health Insurance</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="insurance-submenu">
+                                        {activeInsuranceType === 'car' && (
+                                            <div className="submenu-items">
+                                                <Link to="/claims/car/new" className="submenu-item">
+                                                    <FaAmbulance className="submenu-icon" />
+                                                    Filing new claim
+                                                </Link>
+                                                <Link to="/claims/car/how-it-works" className="submenu-item">
+                                                    <FaTools className="submenu-icon" />
+                                                    How our claims work
+                                                </Link>
+                                                <Link to="/claims/car/garages" className="submenu-item">
+                                                    <FaMapMarkerAlt className="submenu-icon" />
+                                                    Nearby car garage
+                                                </Link>
+                                            </div>
+                                        )}
+                                        
+                                        {activeInsuranceType === 'bike' && (
+                                            <div className="submenu-items">
+                                                <Link to="/claims/bike/new" className="submenu-item">
+                                                    <FaAmbulance className="submenu-icon" />
+                                                    Filing new claim
+                                                </Link>
+                                                <Link to="/claims/bike/how-it-works" className="submenu-item">
+                                                    <FaTools className="submenu-icon" />
+                                                    How our claim works
+                                                </Link>
+                                                <Link to="/claims/bike/repair-shops" className="submenu-item">
+                                                    <FaWrench className="submenu-icon" />
+                                                    Nearby bike repair shop
+                                                </Link>
+                                            </div>
+                                        )}
+                                        
+                                        {activeInsuranceType === 'health' && (
+                                            <div className="submenu-items">
+                                                <Link to="/claims/health/new" className="submenu-item">
+                                                    <FaAmbulance className="submenu-icon" />
+                                                    Filing new claims
+                                                </Link>
+                                                <Link to="/claims/health/track" className="submenu-item">
+                                                    <FaTachometerAlt className="submenu-icon" />
+                                                    Track existing plan
+                                                </Link>
+                                                <Link to="/claims/health/how-it-works" className="submenu-item">
+                                                    <FaTools className="submenu-icon" />
+                                                    How our claims work
+                                                </Link>
+                                                <div className="submenu-item contact-item">
+                                                    <FaPhoneAlt className="submenu-icon" />
+                                                    Need help? contact [91-1140879888]
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    
                         {isLoggedIn ? (
                             <div className="navbar-account" ref={accountMenuRef}>
                                 <button 
@@ -108,7 +240,6 @@ const Navbar = () => {
                                 Login
                             </Link>
                         )}
-                    </div>
                     
                     <div className="hamburger-menu">
                         <Hamburger toggled={isOpen} toggle={setOpen} duration={0.8} size={20} color="#FFFFFF" />

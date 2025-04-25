@@ -5,7 +5,7 @@ import AuthService from './auth.service';
 // const API_URL = 'https://acko.herokuapp.com';
 
 // For local development
-const API_URL = 'http://localhost:8081';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8081';
 
 // Create axios instance
 const api = axios.create({
