@@ -1,7 +1,7 @@
 import Header from "../Header/Header";
 import style from "./addtional.details.module.css";
 import DatePicker from "react-datepicker";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import calendericon from "./calender.svg"
 import noteicon from "./note.svg"
 import { OwnDamagePlan1 } from "../OwnDamagePlan/OwnDamagePlan1/OwnDamagePlan1";
@@ -9,8 +9,8 @@ import { OwnDamagePlan2 } from "../OwnDamagePlan/OwnDamagePlan2/OwnDamagePlan2";
 import { TopProgressBar } from "./TopProgressBar";
 import { Pop } from "./Pop";
 import axios from "axios";
-import firebase from "./firebase.js"
-import { DropDownPopup } from "./DropDownPopup";
+// import firebase from "./firebase.js"
+// import { DropDownPopup } from "./DropDownPopup";
 import { useHistory } from "react-router-dom";
 export const AddtionalDetails = () => {
 

@@ -1,0 +1,5 @@
+Changes summary:
+1. Fixed missing alt attributes on img elements in Multiple components
+2. Fixed improper error throwing in service files by using Error objects
+3. Removed unused imports and variables
+4. Cleaned up code in multiple files

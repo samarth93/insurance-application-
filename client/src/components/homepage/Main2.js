@@ -30,29 +30,29 @@ const Main2 = () => {
            </div>
            <div className='home_main_child1'>
            <div className='home_main_child2'>
-           <img src={icon1}></img>
-           <img src={icon2}></img>
-           <img src={icon3}></img>
-           <img src={icon4}></img>
-           <img src={icon18}></img>
-           <img src={icon5}></img>
-           <img src={icon6}></img>
+           <img src={icon1} alt="Partner logo 1"></img>
+           <img src={icon2} alt="Partner logo 2"></img>
+           <img src={icon3} alt="Partner logo 3"></img>
+           <img src={icon4} alt="Partner logo 4"></img>
+           <img src={icon18} alt="Partner logo 5"></img>
+           <img src={icon5} alt="Partner logo 6"></img>
+           <img src={icon6} alt="Partner logo 7"></img>
            </div>
            <div className='home_main_child2'>
-           <img src={icon7}></img>
-           <img src={icon8}></img>
-           <img src={icon9}></img>
-           <img src={icon10}></img>
-           <img src={icon11}></img>
-           <img src={icon12}></img>
-           <img src={icon13}></img>
+           <img src={icon7} alt="Partner logo 8"></img>
+           <img src={icon8} alt="Partner logo 9"></img>
+           <img src={icon9} alt="Partner logo 10"></img>
+           <img src={icon10} alt="Partner logo 11"></img>
+           <img src={icon11} alt="Partner logo 12"></img>
+           <img src={icon12} alt="Partner logo 13"></img>
+           <img src={icon13} alt="Partner logo 14"></img>
            </div> 
            <div className='home_main_child3'>
-           <img src={icon14}></img>
-           <img src={icon15}></img>
-           <img src={icon16}></img>
-           <img src={icon17}></img>
-           <img src={icon19}></img>
+           <img src={icon14} alt="Partner logo 15"></img>
+           <img src={icon15} alt="Partner logo 16"></img>
+           <img src={icon16} alt="Partner logo 17"></img>
+           <img src={icon17} alt="Partner logo 18"></img>
+           <img src={icon19} alt="Partner logo 19"></img>
            </div>
           
            </div>

@@ -3,12 +3,23 @@ const express = require("express");
 const cors = require("cors");
 require('dotenv').config();
 const mongoose = require('mongoose');
+const connect = require("./src/config/db"); // Add database connection
 
 const app = express();
 
 // CORS and JSON middleware
 app.use(cors());
 app.use(express.json());
+
+// Import controllers
+const carController = require("./src/controllers/car.controller");
+const authController = require("./src/controllers/auth.controller");
+const policyController = require("./src/controllers/policy.controller");
+
+// Routes
+app.use("/cars", carController);
+app.use("/auth", authController);
+app.use("/policies", policyController);
 
 // Basic routes
 app.get("/", (req, res) => {
@@ -23,7 +34,7 @@ app.get("/health", (req, res) => {
   res.status(200).json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
-    database: 'offline' // We're not connecting to DB for this test
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
   });
 });
 
@@ -44,9 +55,28 @@ app.use((req, res) => {
 });
 
 // Start server
-const port = process.env.PORT || 8081;
+const port = 8082;
 
-app.listen(port, () => {
+const server = app.listen(port, async () => {
+  try {
+    await connect();
+    console.log(`Database connected successfully to MongoDB Atlas`);
+  } catch (err) {
+    console.error("Database connection error:", err.message);
+    console.log("Server running without database connection");
+  }
   console.log(`Server running on port: ${port}`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use. Trying port ${parseInt(port) + 1}`);
+    server.close();
+    app.listen(parseInt(port) + 1, () => {
+      console.log(`Server connected to port: ${parseInt(port) + 1}`);
+    });
+  } else {
+    console.error('Server error:', err);
+  }
 }); 
  

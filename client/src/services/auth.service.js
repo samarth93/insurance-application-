@@ -4,7 +4,7 @@ import axios from 'axios';
 // const API_URL = 'https://acko.herokuapp.com';
 
 // For local development
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8081';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8082';
 
 console.log('Using API URL:', API_URL); // Add this line for debugging
 
@@ -23,10 +23,14 @@ api.interceptors.request.use(
     const token = localStorage.getItem('acko_token');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
+      console.log('Adding auth token to request');
+    } else {
+      console.log('No auth token available for request');
     }
     return config;
   },
   (error) => {
+    console.error('Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -37,11 +41,20 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
+    console.error('API Response Error:', error.message);
+    if (error.response) {
+      console.error('Error Status:', error.response.status);
+      console.error('Error Data:', error.response.data);
+      
+      if (error.response.status === 401) {
+        console.log('Authentication error detected, logging out');
       // Token expired or invalid
       localStorage.removeItem('acko_token');
       localStorage.removeItem('acko_user');
       window.location.href = '/login';
+      }
+    } else if (error.request) {
+      console.error('No response received:', error.request);
     }
     return Promise.reject(error);
   }
@@ -61,11 +74,11 @@ const AuthService = {
     } catch (error) {
       console.error('Registration error:', error);
       if (error.code === 'ECONNABORTED') {
-        throw { message: 'Request timed out. Please try again.' };
+        throw new Error('Request timed out. Please try again.');
       } else if (!error.response) {
-        throw { message: 'Network error. Please check your connection and try again.' };
+        throw new Error('Network error. Please check your connection and try again.');
       }
-      throw error.response ? error.response.data : { message: 'An unexpected error occurred' };
+      throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
   },
 
@@ -81,11 +94,11 @@ const AuthService = {
     } catch (error) {
       console.error('Login error:', error);
       if (error.code === 'ECONNABORTED') {
-        throw { message: 'Request timed out. Please try again.' };
+        throw new Error('Request timed out. Please try again.');
       } else if (!error.response) {
-        throw { message: 'Network error. Please check your connection and try again.' };
+        throw new Error('Network error. Please check your connection and try again.');
       }
-      throw error.response ? error.response.data : { message: 'An unexpected error occurred' };
+      throw error.response ? error.response.data : new Error('An unexpected error occurred');
     }
   },
 
@@ -111,8 +124,20 @@ const AuthService = {
   // Get user profile
   getProfile: async () => {
     try {
-      const response = await api.get('/user/profile');
-      return response.data;
+      // Use both the specific endpoint for profile and a fallback with check-user if necessary
+      const email = AuthService.getCurrentUser()?.email;
+      if (!email) {
+        throw new Error('No email available to fetch profile');
+      }
+
+      try {
+        const response = await api.get(`/auth/check-user/${email}`);
+        return response.data;
+      } catch (error) {
+        console.error('Error with check-user endpoint:', error);
+        // If direct profile endpoint not available, use the check-user endpoint
+        throw error;
+      }
     } catch (error) {
       throw error.response ? error.response.data : error;
     }

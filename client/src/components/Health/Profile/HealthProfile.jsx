@@ -7,20 +7,22 @@ const Container = styled.div`
   max-width: 1000px;
   margin: 40px auto;
   padding: 40px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  animation: fadeIn 0.8s ease-in;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px) saturate(180%);
+  border-radius: 28px;
+  box-shadow: 0 12px 48px rgba(82, 46, 211, 0.10), 0 1.5px 8px rgba(0,0,0,0.04);
+  animation: fadeIn 0.8s cubic-bezier(0.4,0,0.2,1);
+  border: 1.5px solid rgba(138,43,226,0.10);
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(32px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   @media (max-width: 768px) {
-    margin: 20px;
-    padding: 20px;
-    border-radius: 16px;
+    margin: 12px;
+    padding: 16px 4px;
+    border-radius: 18px;
   }
 `;
 
@@ -56,30 +58,36 @@ const Subtitle = styled.p`
 const ProgressContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: 40px auto;
   position: relative;
   max-width: 800px;
+  min-height: 70px;
   
   &::before {
     content: '';
     position: absolute;
-    top: 18px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: #e0e0e0;
+    top: 50%;
+    left: 40px;
+    right: 40px;
+    height: 4px;
+    background: linear-gradient(90deg, #e0e0e0 0%, #d1c4e9 100%);
     z-index: 1;
+    transform: translateY(-50%);
   }
   
   @media (max-width: 768px) {
     overflow-x: auto;
     padding-bottom: 15px;
     margin: 30px 0;
-    
+    &::before {
+      left: 24px;
+      right: 24px;
+      height: 3px;
+    }
     &::-webkit-scrollbar {
       height: 4px;
     }
-    
     &::-webkit-scrollbar-thumb {
       background: #d0d0d0;
       border-radius: 4px;
@@ -91,31 +99,42 @@ const ProgressStep = styled.div`
   position: relative;
   z-index: 2;
   text-align: center;
-  transition: all 0.3s ease;
-  
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  min-width: 90px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   @media (max-width: 768px) {
-    min-width: 100px;
+    min-width: 80px;
     flex: 0 0 auto;
   }
 `;
 
 const StepCircle = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: ${props => props.active ? '#522ED3' : props.completed ? '#8967E8' : 'white'};
+  background: ${props => props.active ? 'linear-gradient(135deg, #522ED3 0%, #8967E8 100%)' : props.completed ? 'linear-gradient(135deg, #8967E8 0%, #b2a4f7 100%)' : 'rgba(255,255,255,0.7)'};
   color: ${props => (props.active || props.completed) ? 'white' : '#999'};
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 12px;
-  font-weight: 600;
-  border: 2px solid ${props => props.active ? '#522ED3' : props.completed ? '#8967E8' : '#e0e0e0'};
-  transition: all 0.3s ease;
-  box-shadow: ${props => (props.active || props.completed) ? '0 4px 12px rgba(82, 46, 211, 0.2)' : 'none'};
-  
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 1.3rem;
+  border: 2.5px solid ${props => props.active ? '#522ED3' : props.completed ? '#8967E8' : '#e0e0e0'};
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: ${props => (props.active || props.completed) ? '0 4px 16px rgba(82, 46, 211, 0.18)' : 'none'};
+  position: relative;
+  overflow: hidden;
+  background-clip: padding-box;
+  z-index: 2;
+  & svg {
+    font-size: 1.5rem;
+  }
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.12);
   }
 `;
 
@@ -127,29 +146,27 @@ const StepLabel = styled.div`
 `;
 
 const FormContainer = styled.div`
-  background: white;
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  margin-bottom: 30px;
-  transition: all 0.3s ease;
-  border: 1px solid #f0f0f0;
-  animation: slideUp 0.6s ease-in;
-  
+  background: rgba(255,255,255,0.92);
+  border-radius: 22px;
+  padding: 40px 32px;
+  box-shadow: 0 8px 32px rgba(82, 46, 211, 0.07);
+  margin-bottom: 36px;
+  border: 1.5px solid #f0f0f0;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  animation: slideUp 0.6s cubic-bezier(0.4,0,0.2,1);
+  &:hover {
+    box-shadow: 0 16px 48px rgba(82, 46, 211, 0.13);
+    border-color: #e6e0f8;
+    transform: translateY(-2px) scale(1.01);
+  }
   @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(32px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  
-  &:hover {
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-    border-color: #e6e6e6;
-    transform: translateY(-2px);
-  }
-  
   @media (max-width: 768px) {
-    padding: 25px;
-    margin-bottom: 20px;
+    padding: 18px 6px;
+    margin-bottom: 18px;
+    border-radius: 14px;
   }
 `;
 
@@ -234,24 +251,23 @@ const Label = styled.label`
 const Input = styled.input`
   width: 100%;
   box-sizing: border-box;
-  padding: 12px 16px;
+  padding: 14px 18px;
   border: 2px solid ${props => props.error ? '#e74c3c' : '#e0e0e0'};
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 14px;
+  font-size: 1.08rem;
   color: #2d3436;
-  transition: all 0.3s ease;
-  background: ${props => props.error ? '#fff5f5' : 'white'};
-  
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  background: ${props => props.error ? '#fff5f5' : 'rgba(255,255,255,0.95)'};
+  box-shadow: 0 2px 8px rgba(82, 46, 211, 0.04);
   &:focus {
     outline: none;
     border-color: #522ED3;
-    box-shadow: 0 0 0 4px rgba(82, 46, 211, 0.1);
+    box-shadow: 0 0 0 6px rgba(82, 46, 211, 0.10);
+    background: #f8f9ff;
   }
-  
   &::placeholder {
     color: #b2bec3;
   }
-  
   &:disabled {
     background: #f8f9fa;
     cursor: not-allowed;
@@ -261,27 +277,26 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   box-sizing: border-box;
-  padding: 12px 16px;
+  padding: 14px 18px;
   border: 2px solid ${props => props.error ? '#e74c3c' : '#e0e0e0'};
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 14px;
+  font-size: 1.08rem;
   color: #2d3436;
-  transition: all 0.3s ease;
-  background: ${props => props.error ? '#fff5f5' : 'white'};
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  background: ${props => props.error ? '#fff5f5' : 'rgba(255,255,255,0.95)'};
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 16px center;
-  background-size: 16px;
+  background-position: right 18px center;
+  background-size: 18px;
   cursor: pointer;
-  height: 48px;
-  
+  height: 52px;
   &:focus {
     outline: none;
     border-color: #522ED3;
-    box-shadow: 0 0 0 4px rgba(82, 46, 211, 0.1);
+    box-shadow: 0 0 0 6px rgba(82, 46, 211, 0.10);
+    background: #f8f9ff;
   }
-  
   &:disabled {
     background: #f8f9fa;
     cursor: not-allowed;
@@ -341,40 +356,35 @@ const ContinueButton = styled.button`
   background: linear-gradient(135deg, #522ED3 0%, #8967E8 100%);
   color: white;
   border: none;
-  border-radius: 12px;
-  padding: 16px 32px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  border-radius: 14px;
+  padding: 18px 38px;
+  font-size: 1.15rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 15px rgba(82, 46, 211, 0.2);
-  
+  box-shadow: 0 4px 18px rgba(82, 46, 211, 0.18);
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(82, 46, 211, 0.3);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 32px rgba(82, 46, 211, 0.22);
+    background: linear-gradient(135deg, #8967E8 0%, #522ED3 100%);
   }
-  
   &:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
-  
   &:disabled {
     background: #d1d1d1;
     cursor: not-allowed;
     box-shadow: none;
   }
-  
   svg {
     margin-left: 10px;
     transition: transform 0.2s;
   }
-  
   &:hover svg {
     transform: translateX(3px);
   }
-  
   @media (max-width: 768px) {
     width: 100%;
     justify-content: center;
@@ -655,19 +665,19 @@ const HealthProfile = () => {
       
       <ProgressContainer>
         <ProgressStep>
-          <StepCircle active completed first>1</StepCircle>
+          <StepCircle active completed first><FaUser /></StepCircle>
           <StepLabel active completed>Personal Details</StepLabel>
         </ProgressStep>
         <ProgressStep>
-          <StepCircle>2</StepCircle>
+          <StepCircle><FaCalendarAlt /></StepCircle>
           <StepLabel>Medical History</StepLabel>
         </ProgressStep>
         <ProgressStep>
-          <StepCircle>3</StepCircle>
+          <StepCircle><FaBriefcase /></StepCircle>
           <StepLabel>Plan Selection</StepLabel>
         </ProgressStep>
         <ProgressStep>
-          <StepCircle>4</StepCircle>
+          <StepCircle><FaRupeeSign /></StepCircle>
           <StepLabel>Payment</StepLabel>
         </ProgressStep>
       </ProgressContainer>

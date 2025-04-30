@@ -30,6 +30,24 @@ const Login = () => {
     }
   };
 
+  // Helper function to login as a test user
+  const loginAsTestUser = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    setEmail('palsamarth9@gmail.com');
+    
+    try {
+      await AuthService.login('palsamarth9@gmail.com', 'password123');
+      history.push('/dashboard');
+    } catch (err) {
+      console.error('Test login failed:', err);
+      setError(err.message || 'Failed to login as test user. Try the regular login.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-form-container">
@@ -76,6 +94,15 @@ const Login = () => {
 
             <button type="submit" className="auth-button" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
+            </button>
+            
+            <button 
+              onClick={loginAsTestUser} 
+              className="auth-button secondary-button"
+              style={{ marginTop: '10px', backgroundColor: '#f0f0f0', color: '#333' }}
+              disabled={loading}
+            >
+              Login as Samarth (Demo)
             </button>
           </form>
 

@@ -5,7 +5,7 @@ import AuthService from './auth.service';
 // const API_URL = 'https://acko.herokuapp.com';
 
 // For local development
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8081';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8083';
 
 // Create axios instance
 const api = axios.create({
@@ -35,23 +35,40 @@ const PolicyService = {
   getPolicies: async () => {
     try {
       // Add timeout to prevent hanging requests
+      console.log('Attempting to fetch policies');
       const response = await api.get('/policies', { timeout: 10000 });
+      console.log('Policies fetched successfully:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error getting policies:', error);
       
+      // If server returns a 500 error, try fetching policies by email as a fallback
+      if (error.response && error.response.status >= 500) {
+        try {
+          console.log('Attempting fallback: fetching policies by email');
+          const user = AuthService.getCurrentUser();
+          if (user && user.email) {
+            const fallbackResponse = await api.get(`/policies/check-by-email/${user.email}`, { timeout: 10000 });
+            console.log('Fallback successful:', fallbackResponse.data);
+            return fallbackResponse.data;
+          }
+        } catch (fallbackError) {
+          console.error('Fallback also failed:', fallbackError);
+        }
+      }
+      
       // More detailed error handling
       if (error.code === 'ECONNABORTED') {
-        throw { message: 'Request timed out. Server might be unavailable.' };
+        throw new Error('Request timed out. Server might be unavailable.');
       } else if (!error.response) {
-        throw { message: 'Network error. Please check your connection.' };
+        throw new Error('Network error. Please check your connection.');
       } else if (error.response.status === 401) {
         // Token expired, force re-login
         AuthService.logout();
         window.location.href = '/login';
-        throw { message: 'Session expired. Please log in again.' };
+        throw new Error('Session expired. Please log in again.');
       } else if (error.response.status >= 500) {
-        throw { message: 'Server error. Please try again later.' };
+        throw new Error('Server error. Please try again later.');
       }
       
       throw error.response ? error.response.data : error;
@@ -67,9 +84,9 @@ const PolicyService = {
       console.error('Error getting policy:', error);
       
       if (error.code === 'ECONNABORTED') {
-        throw { message: 'Request timed out. Server might be unavailable.' };
+        throw new Error('Request timed out. Server might be unavailable.');
       } else if (!error.response) {
-        throw { message: 'Network error. Please check your connection.' };
+        throw new Error('Network error. Please check your connection.');
       }
       
       throw error.response ? error.response.data : error;

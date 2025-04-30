@@ -4,23 +4,57 @@ const User = require('../models/user.model');
 const { authenticate } = require('../middleware/auth.middleware');
 const router = express.Router();
 
-// Middleware to verify token for all policy routes
+// Add a debug route to check policies for a user by email (no authentication required)
+router.get("/check-by-email/:email", async (req, res) => {
+    try {
+        const email = req.params.email;
+        console.log(`Checking policies for user with email: ${email}`);
+        
+        // First, find the user
+        const user = await User.findOne({ email });
+        
+        if (!user) {
+            return res.status(404).json({
+                status: "error",
+                message: "User not found"
+            });
+        }
+        
+        // Find all policies associated with this user
+        const policies = await Policy.find({ userId: user._id });
+        
+        return res.status(200).json({
+            status: "success",
+            count: policies.length,
+            data: policies
+        });
+    } catch (err) {
+        console.error("Error checking policies by email:", err.message);
+        return res.status(500).json({
+            status: "error",
+            message: err.message
+        });
+    }
+});
+
+// Apply authentication middleware to all other routes
 router.use(authenticate);
 
-// Get all policies for a user
-router.get('/', async (req, res) => {
+// Get all policies for the authenticated user
+router.get("/", async (req, res) => {
   try {
-    const policies = await Policy.find({ userId: req.user.id });
+        const userId = req.user._id;
+        const policies = await Policy.find({ userId });
     
     return res.status(200).json({
-      status: 'success',
-      message: 'Policies retrieved successfully',
+            status: "success",
+            count: policies.length,
       data: policies
     });
-  } catch (error) {
+    } catch (err) {
     return res.status(500).json({
-      status: 'error',
-      message: error.message
+            status: "error",
+            message: err.message
     });
   }
 });

@@ -12,28 +12,6 @@ const Dashboard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isServerAvailable, setIsServerAvailable] = useState(true);
   const [databaseStatus, setDatabaseStatus] = useState('unknown');
-  const [useMockData, setUseMockData] = useState(false);
-
-  // Mock data function
-  const loadMockData = () => {
-    setUser({
-      name: 'Demo User',
-      email: 'demo@example.com',
-      mobile: '1234567890'
-    });
-    setPolicies([
-      {
-        id: '1',
-        policyNumber: 'POL-001',
-        type: 'Comprehensive',
-        status: 'active',
-        startDate: new Date().toISOString(),
-        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-        premium: 5000
-      }
-    ]);
-    setUseMockData(true);
-  };
 
   // Check server availability with enhanced status info
   const checkServerAvailability = async () => {
@@ -41,7 +19,7 @@ const Dashboard = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
       
-      const response = await fetch('http://localhost:8080/health', { 
+      const response = await fetch('http://localhost:8082/health', { 
         method: 'GET',
         signal: controller.signal
       });
@@ -80,8 +58,8 @@ const Dashboard = () => {
       const serverStatus = await checkServerAvailability();
       
       if (!serverStatus.available) {
-        console.log("Server unavailable, using mock data");
-        loadMockData();
+        console.log("Server unavailable");
+        setError('Server is currently unavailable. Please try again later.');
         setLoading(false);
         return;
       }
@@ -91,18 +69,35 @@ const Dashboard = () => {
       }
       
       try {
+        let currentUserData = null;
+        
         // Get user profile with better error handling
         try {
           const userResponse = await AuthService.getProfile();
           if (userResponse && userResponse.data) {
             setUser(userResponse.data);
+            currentUserData = userResponse.data;
           } else {
             console.warn("Invalid user data response:", userResponse);
-            // Don't set error yet, try to fetch policies anyway
+            // Try to get current user from local storage as fallback
+            const localUser = AuthService.getCurrentUser();
+            if (localUser) {
+              setUser(localUser);
+              currentUserData = localUser;
+            } else {
+              setError('Could not retrieve user profile. Please log in again.');
+            }
           }
         } catch (userError) {
           console.error("Error fetching user profile:", userError);
-          // Continue with policies fetch, don't set error yet
+          // Try to get current user from local storage as fallback
+          const localUser = AuthService.getCurrentUser();
+          if (localUser) {
+            setUser(localUser);
+            currentUserData = localUser;
+          } else {
+            setError('Could not retrieve user profile. Please log in again.');
+          }
         }
 
         // Get policies with better error handling
@@ -115,16 +110,44 @@ const Dashboard = () => {
           } else {
             console.warn("No policies data in response:", policiesResponse);
             setPolicies([]);
+            
+            // Try fallback method if regular policies endpoint returns empty data
+            if (currentUserData && currentUserData.email) {
+              try {
+                console.log("Trying fallback: fetching policies by email");
+                const fallbackResponse = await fetch(`http://localhost:8082/policies/check-by-email/${currentUserData.email}`);
+                if (fallbackResponse.ok) {
+                  const fallbackData = await fallbackResponse.json();
+                  if (fallbackData && fallbackData.data && fallbackData.data.length > 0) {
+                    console.log("Fallback successful:", fallbackData);
+                    setPolicies(fallbackData.data);
+                  }
+                }
+              } catch (fallbackError) {
+                console.error("Fallback policy fetch failed:", fallbackError);
+              }
+            }
           }
         } catch (policyError) {
           console.error("Error fetching policies:", policyError);
           setPolicies([]);
-          // We'll show empty policies rather than an error
-        }
-
-        // Only set error if we failed to get both user and policies
-        if (!user && policies.length === 0) {
-          setError('Please check your connection and try again');
+          
+          // Try fallback method if regular policies endpoint fails
+          if (currentUserData && currentUserData.email) {
+            try {
+              console.log("Trying fallback after error: fetching policies by email");
+              const fallbackResponse = await fetch(`http://localhost:8082/policies/check-by-email/${currentUserData.email}`);
+              if (fallbackResponse.ok) {
+                const fallbackData = await fallbackResponse.json();
+                if (fallbackData && fallbackData.data && fallbackData.data.length > 0) {
+                  console.log("Fallback successful:", fallbackData);
+                  setPolicies(fallbackData.data);
+                }
+              }
+            } catch (fallbackError) {
+              console.error("Fallback policy fetch failed:", fallbackError);
+            }
+          }
         }
 
         setLoading(false);
@@ -268,7 +291,7 @@ const Dashboard = () => {
         <div className="dashboard-header">
           <h1>My Dashboard</h1>
           <div className="dashboard-actions">
-            <button onClick={() => setRefreshKey(prevKey => prevKey + 1)} className="dashboard-button secondary refresh-button">
+            <button onClick={refreshPolicies} className="dashboard-button secondary refresh-button">
               Refresh
             </button>
             {!isServerAvailable && (
@@ -281,11 +304,6 @@ const Dashboard = () => {
               <div className="database-status-indicator">
                 Database Offline
                 <span className="status-dot warning"></span>
-              </div>
-            )}
-            {useMockData && (
-              <div className="mock-data-indicator">
-                Demo Mode
               </div>
             )}
             <Link to="/profile" className="dashboard-button secondary">
@@ -338,7 +356,7 @@ const Dashboard = () => {
           {policies.length === 0 ? (
             <div className="no-policies">
               <p>You don't have any policies yet.</p>
-              <p className="policy-note">If you've recently purchased a policy, please click the "Refresh Policies" button above.</p>
+              <p className="policy-note">If you've recently purchased a policy, please click the "Refresh" button above.</p>
               <Link to="/cars/useofcar" className="dashboard-button primary">
                 Buy Your First Policy
               </Link>

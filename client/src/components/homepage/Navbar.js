@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Hamburger from 'hamburger-react';
 import { 
-    FaUser, 
     FaChevronDown, 
     FaTachometerAlt, 
     FaUserEdit, 

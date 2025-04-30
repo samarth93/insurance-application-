@@ -1,19 +1,7 @@
 import styled from "styled-components";
-import Header from "../Header/Header";
-import styles from "./DiffPlanOptions.module.css";
-import recommended from "./assets/recommended.svg";
-import {
-  calendarSvg,
-  carSvg,
-  emiSvg,
-  mapSvg,
-  needHelpSvg,
-} from "./assets/svgs";
-import { images } from "./assets/imgs";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import Cardetail from "../Cars/Cardetail/Cardetail";
 import { FaCheck, FaTimes, FaInfoCircle, FaShieldAlt, FaCrown, FaCar } from "react-icons/fa";
 import "./plaNoptions.css";
 
@@ -26,25 +14,11 @@ const Container = styled.div`
   display: flex;
   grid-gap: 16px;
 `;
-const InContleft = styled.div`
-  background-color: #ffffff;
-  height: 400px;
-  width: 368px;
-  border: 1px solid #dcdee9;
-`;
-const InContright = styled.div`
-  background-color: #ffffff;
-  // height: 400px;
-  width: 368px;
-  // margin-left: 10.9%;
-  border: 1px solid #dcdee9;
-`;
 
 export const DifferentPlanOptions = () => {
   const history = useHistory();
   
   const [premium, setPremium] = useState(3121);
-  const [data, setData] = useState({});
   const [ownDamagePlan, setOwnDamagePlan] = useState(3121);
   const [thirdPartyPlan, setThirdPartyPlan] = useState(2972);
   const [comprehensivePlan, setComprehensivePlan] = useState(4299);
@@ -61,7 +35,6 @@ export const DifferentPlanOptions = () => {
       
       // Fetch car data from API
       const response = await axios.get(`https://acko.herokuapp.com/cars/${id}`);
-      setData(response.data);
       
       // Set premiums with some realistic calculation
       const baseValue = Math.floor(Math.random() * 2000) + 2500;

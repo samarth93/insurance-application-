@@ -19,7 +19,7 @@ const Sub = () => {
   <div style={{marginTop:"20px"}}>Very good experience. Got the settlement done in less than 24 hours.</div>
   <div className='sub_rate'>
   <div>
-<img src={e1} style={{marginRight:"20px"}}></img>
+<img src={e1} style={{marginRight:"20px"}} alt="Rahul Gupta profile"></img>
   </div>
   <div>
   <div style={{fontSize:"small", marginTop:"0px"}}>Rahul Gupta</div>
@@ -42,7 +42,7 @@ const Sub = () => {
 Thank you so much for the amazing service, Special thanks to Mr. Rais Shaikh.</div>
   <div className='sub_rate'>
   <div>
-<img src={e2} style={{marginRight:"20px"}}></img>
+<img src={e2} style={{marginRight:"20px"}} alt="Somnath Mane profile"></img>
   </div>
   <div>
   <div style={{fontSize:"small", marginTop:"0px"}}>Somnath Mane</div>
@@ -64,7 +64,7 @@ Thank you so much for the amazing service, Special thanks to Mr. Rais Shaikh.</d
 Hassle free insurance & quick response. Absolutely best insurance company ever</div>
   <div className='sub_rate'>
   <div>
-<img src={e3} style={{marginRight:"20px"}}></img>
+<img src={e3} style={{marginRight:"20px"}} alt="Vinil Kumar profile"></img>
   </div>
   <div>
   <div style={{fontSize:"small",marginTop:"0px"}}>Vinil Kumar</div>
