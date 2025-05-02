@@ -426,14 +426,32 @@ const HealthMedicalInfo = () => {
         }));
       }
     }
-  }, [formData.height, formData.weight, history]);
+    
+    // Ensure medication is set to 'yes' when existingCondition is 'yes'
+    if (formData.existingCondition === 'yes' && formData.medication !== 'yes') {
+      setFormData(prev => ({
+        ...prev,
+        medication: 'yes'
+      }));
+    }
+  }, [formData.height, formData.weight, formData.existingCondition, formData.medication, history]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    
+    // If the name is existingCondition and value is 'yes', also set medication to 'yes'
+    if (name === 'existingCondition' && value === 'yes') {
+      setFormData({
+        ...formData,
+        [name]: value,
+        medication: 'yes' // Automatically set medication to 'yes'
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
     
     // Clear error when user types
     if (errors[name]) {
@@ -489,9 +507,15 @@ const HealthMedicalInfo = () => {
       newErrors.surgeryDetails = 'Please provide details of your surgeries';
     }
     
-    if (!formData.medication) {
-      newErrors.medication = 'Please select an option';
-    } else if (formData.medication === 'yes' && !formData.medicationDetails.trim()) {
+    // Only validate medication if existingCondition is not 'yes'
+    if (formData.existingCondition !== 'yes') {
+      if (!formData.medication) {
+        newErrors.medication = 'Please select an option';
+      }
+    }
+    
+    // Always validate medicationDetails if medication is 'yes'
+    if (formData.medication === 'yes' && !formData.medicationDetails.trim()) {
       newErrors.medicationDetails = 'Please provide details of your medications';
     }
     
@@ -735,6 +759,11 @@ const HealthMedicalInfo = () => {
           
           <FormGroup>
             <Label>Are you currently taking any medications regularly?</Label>
+            {formData.existingCondition === 'yes' && (
+              <div style={{ fontSize: '13px', color: '#666', marginBottom: '10px', fontStyle: 'italic' }}>
+                *Since you have existing medical conditions, this option is automatically set to "Yes"
+              </div>
+            )}
             <RadioGroup>
               <RadioLabel>
                 <RadioInput
@@ -743,6 +772,7 @@ const HealthMedicalInfo = () => {
                   value="yes"
                   checked={formData.medication === 'yes'}
                   onChange={handleChange}
+                  disabled={formData.existingCondition === 'yes'}
                 />
                 Yes
               </RadioLabel>
@@ -753,6 +783,7 @@ const HealthMedicalInfo = () => {
                   value="no"
                   checked={formData.medication === 'no'}
                   onChange={handleChange}
+                  disabled={formData.existingCondition === 'yes'}
                 />
                 No
               </RadioLabel>
