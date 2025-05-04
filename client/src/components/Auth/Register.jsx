@@ -9,6 +9,7 @@ const Register = () => {
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [errors, setErrors] = useState([]); // Array for multiple errors
   const [loading, setLoading] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const history = useHistory();
@@ -16,6 +17,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setErrors([]);
     setLoading(true);
 
     try {
@@ -42,7 +44,21 @@ const Register = () => {
       history.push('/dashboard');
     } catch (err) {
       console.error('Registration failed:', err);
-      setError(err.message || 'Failed to register. Please try again.');
+      
+      // Handle different error formats
+      if (err.errors && Array.isArray(err.errors)) {
+        // Server returned an array of errors
+        setErrors(err.errors);
+      } else if (err.response && err.response.data && err.response.data.errors) {
+        // Server returned validation errors
+        setErrors(err.response.data.errors);
+      } else if (err.response && err.response.data && err.response.data.message) {
+        // Server returned a single error message
+        setError(err.response.data.message);
+      } else {
+        // Fallback to any available message
+        setError(err.message || 'Failed to register. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -56,6 +72,17 @@ const Register = () => {
           <p className="auth-subtitle">Join Insuretech Insurance to get started</p>
 
           {error && <div className="auth-error">{error}</div>}
+          
+          {/* Display multiple errors if available */}
+          {errors.length > 0 && (
+            <div className="auth-error">
+              <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
+                {errors.map((err, index) => (
+                  <li key={index}>{err}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="form-group">
@@ -88,7 +115,7 @@ const Register = () => {
                 type="tel"
                 id="mobile"
                 value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
+                onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
                 placeholder="Enter your mobile number"
                 required
               />

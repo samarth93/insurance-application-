@@ -78,7 +78,20 @@ const AuthService = {
       } else if (!error.response) {
         throw new Error('Network error. Please check your connection and try again.');
       }
-      throw error.response ? error.response.data : new Error('An unexpected error occurred');
+      
+      // Handle validation errors specifically
+      if (error.response && error.response.data) {
+        if (error.response.data.errors) {
+          // Pass the validation errors to the component
+          const errorObj = new Error(error.response.data.message || 'Validation failed');
+          errorObj.errors = error.response.data.errors;
+          throw errorObj;
+        } else {
+          throw error.response.data;
+        }
+      }
+      
+      throw new Error('An unexpected error occurred');
     }
   },
 
