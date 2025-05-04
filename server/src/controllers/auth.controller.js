@@ -10,6 +10,11 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 };
 
+const validateMobile = (mobile) => {
+  // Validate that mobile is a string of digits
+  return /^\d{8,15}$/.test(mobile);
+};
+
 const validateRegistration = (userData) => {
   const errors = [];
 
@@ -27,6 +32,8 @@ const validateRegistration = (userData) => {
 
   if (!userData.mobile) {
     errors.push('Mobile number is required');
+  } else if (!validateMobile(userData.mobile)) {
+    errors.push('Mobile number must be 8-15 digits');
   }
 
   return { valid: errors.length === 0, errors };

@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/server",
     "dev": "nodemon src/server",
-    "prod": "NODE_ENV=production node src/server"
+    "prod": "NODE_ENV=production node src/server",
+    "clean-start": "killall -9 node || true && nodemon src/server"
   },
   "author": "",
   "license": "ISC",

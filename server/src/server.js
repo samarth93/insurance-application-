@@ -8,7 +8,7 @@ const app = express();
 
 // More detailed CORS setup
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8082', '*'],
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8082', 'http://localhost:8083', 'http://localhost:8084', '*'],
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true,
@@ -157,10 +157,29 @@ const server = app.listen(port, async () => {
 
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${port} is already in use. Trying port ${parseInt(port) + 1}`);
+    const newPort = parseInt(port) + 1;
+    console.error(`Port ${port} is already in use. Trying port ${newPort}`);
     server.close();
-    app.listen(parseInt(port) + 1, () => {
-      console.log(`Server connected to port: ${parseInt(port) + 1}`);
+    
+    // Try the next port
+    const newServer = app.listen(newPort, () => {
+      console.log(`Server running on alternative port: ${newPort}`);
+    });
+    
+    // Add the same error handler to the new server
+    newServer.on('error', (newErr) => {
+      if (newErr.code === 'EADDRINUSE') {
+        const finalPort = newPort + 1;
+        console.error(`Port ${newPort} is also in use. Trying one final port ${finalPort}`);
+        newServer.close();
+        
+        // Try one final port
+        app.listen(finalPort, () => {
+          console.log(`Server running on final alternative port: ${finalPort}`);
+        });
+      } else {
+        console.error('Server error:', newErr);
+      }
     });
   } else {
     console.error('Server error:', err);

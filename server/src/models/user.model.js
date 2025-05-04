@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   name: { type: String, required: true },
-  mobile: { type: Number, required: true },
+  mobile: { type: String, required: true },
   
   // Policy related fields
   selectedPlan: { type: String, required: false },
